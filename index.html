@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGPU Spectral Waterfall with Microphone</title>
+    <style>
+        canvas {
+            width: 640px;
+            height: 300px;
+            background-color: #000;
+        }
+        #status {
+            font-size: 20px;
+            color: green;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebGPU Spectral Waterfall with Microphone</h1>
+    <canvas id="gpuCanvas" width="640" height="480"></canvas>
+    <canvas id="visualizer" width="640" height="200"></canvas>
+    <div id="status">Microphone Status: Not working</div>
+
+    <script type="module">
+        async function initWebGPU() {
+            if (!navigator.gpu) {
+                console.error('WebGPU не поддерживается!');
+                document.getElementById('status').innerText = 'WebGPU не поддерживается!';
+                return;
+            }
+
+            const adapter = await navigator.gpu.requestAdapter();
+            if (!adapter) {
+                throw new Error('WebGPU адаптер не найден.');
+            }
+
+            const device = await adapter.requestDevice();
+            const canvas = document.getElementById('gpuCanvas');
+            const context = canvas.getContext('webgpu');
+            const format = navigator.gpu.getPreferredCanvasFormat();
+            context.configure({
+                device: device,
+                format: format
+            });
+
+            const vertexShaderCode = `
+            @vertex
+            fn main(@builtin(vertex_index) VertexIndex: u32) -> @builtin(position) vec4<f32> {
+                var positions = array<vec2<f32>, 4>(
+                    vec2<f32>(-1.0, -1.0),
+                    vec2<f32>( 1.0, -1.0),
+                    vec2<f32>(-1.0,  1.0),
+                    vec2<f32>( 1.0,  1.0)
+                );
+                let pos = positions[VertexIndex];
+                return vec4<f32>(pos, 0.0, 1.0);
+            }`;
+
+            const fragmentShaderCode = `
+            @group(0) @binding(0) var<uniform> fftData: array<vec4<f32>, 256>;
+
+            @fragment
+            fn main(@builtin(position) fragCoord: vec4<f32>) -> @location(0) vec4<f32> {
+                let index = i32(fragCoord.x / ${canvas.width}.0 * 1024.0);
+                let amplitude = fftData[index / 4][index % 4]; // Доступ к нужному элементу
+                let color = vec4<f32>(amplitude, 0.0, 1.0 - amplitude, 1.0);
+                return color;
+            }`;
+
+            const vertexModule = device.createShaderModule({ code: vertexShaderCode });
+            const fragmentModule = device.createShaderModule({ code: fragmentShaderCode });
+
+            const pipeline = device.createRenderPipeline({
+                layout: 'auto',
+                vertex: {
+                    module: vertexModule,
+                    entryPoint: 'main',
+                    buffers: []
+                },
+                fragment: {
+                    module: fragmentModule,
+                    entryPoint: 'main',
+                    targets: [{ format: format }]
+                },
+                primitive: {
+                    topology: 'triangle-strip',
+                    cullMode: 'none'
+                }
+            });
+
+            const fftBuffer = device.createBuffer({
+                size: 1024 * 4,
+                usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+            });
+
+            const bindGroup = device.createBindGroup({
+                layout: pipeline.getBindGroupLayout(0),
+                entries: [{
+                    binding: 0,
+                    resource: { buffer: fftBuffer }
+                }]
+            });
+
+            const visualizerCanvas = document.getElementById('visualizer');
+            const canvasCtx = visualizerCanvas.getContext('2d');
+            const WIDTH = visualizerCanvas.width;
+            const HEIGHT = visualizerCanvas.height;
+
+            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+                .then(function (stream) {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const source = audioContext.createMediaStreamSource(stream);
+                    const analyser = audioContext.createAnalyser();
+                    analyser.fftSize = 2048;
+                    const bufferLength = analyser.frequencyBinCount;
+                    const dataArray = new Uint8Array(bufferLength);
+
+                    source.connect(analyser);
+                    document.getElementById('status').innerHTML = 'Microphone Status: Working';
+
+                    function render() {
+                        analyser.getByteFrequencyData(dataArray);
+                        const floatArray = new Float32Array(1024);
+                        for (let i = 0; i < 1024; i++) {
+                            floatArray[i] = dataArray[i] / 255.0;
+                        }
+
+                        const vec4Array = new Float32Array(1024);
+                        for (let i = 0; i < 1024; i++) {
+                            vec4Array[i] = floatArray[i]; // Записываем в vec4
+                        }
+                        device.queue.writeBuffer(fftBuffer, 0, vec4Array.buffer, 0, vec4Array.byteLength);
+
+                        const commandEncoder = device.createCommandEncoder();
+                        const textureView = context.getCurrentTexture().createView();
+
+                        const renderPassDescriptor = {
+                            colorAttachments: [{
+                                view: textureView,
+                                loadOp: 'clear',
+                                clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+                                storeOp: 'store',
+                            }]
+                        };
+
+                        const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+                        passEncoder.setPipeline(pipeline);
+                        passEncoder.setBindGroup(0, bindGroup);
+                        passEncoder.draw(4, 1, 0, 0);
+                        passEncoder.end();
+
+                        device.queue.submit([commandEncoder.finish()]);
+                        requestAnimationFrame(render);
+                    }
+
+                    function drawVisualizer() {
+                        requestAnimationFrame(drawVisualizer);
+
+                        analyser.getByteTimeDomainData(dataArray);
+
+                        canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+                        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+                        canvasCtx.lineWidth = 2;
+                        canvasCtx.strokeStyle = 'rgb(0, 255, 0)';
+
+                        canvasCtx.beginPath();
+                        const sliceWidth = WIDTH * 1.0 / bufferLength;
+                        let x = 0;
+
+                        for (let i = 0; i < bufferLength; i++) {
+                            const v = dataArray[i] / 128.0;
+                            const y = v * HEIGHT / 2;
+
+                            if (i === 0) {
+                                canvasCtx.moveTo(x, y);
+                            } else {
+                                canvasCtx.lineTo(x, y);
+                            }
+
+                            x += sliceWidth;
+                        }
+
+                        canvasCtx.lineTo(WIDTH, HEIGHT / 2);
+                        canvasCtx.stroke();
+                    }
+
+                    render();
+                    drawVisualizer();
+                })
+                .catch(function (err) {
+                    console.error('Ошибка доступа к микрофону:', err);
+                    document.getElementById('status').innerText = 'Ошибка доступа к микрофону';
+                });
+        }
+
+        initWebGPU();
+    </script>
+</body>
+</html>
