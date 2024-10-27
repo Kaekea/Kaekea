@@ -25,6 +25,8 @@
     <canvas id="visualizer" width="640" height="200"></canvas>
     <div id="status">Microphone Status: Not working</div>
 
+    
+
     <script type="module">
         async function initWebGPU() {
             if (!navigator.gpu) {
@@ -200,5 +202,66 @@
 
         initWebGPU();
     </script>
+
+        <h1>Онлайн-транскрибация речи в текст</h1>
+    <button onclick="copyToClipboard()">Скопировать в буфер обмена</button>
+    
+    <textarea id="transcript" placeholder="Ваш текст появится здесь..." contenteditable="true"></textarea>
+
+    <script>
+        let recognition;
+
+        window.onload = function() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert('Извините, ваш браузер не поддерживает Google Web Speech API.');
+                return;
+            }
+
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = true; // Позволяет распознавание в режиме онлайн
+            recognition.interimResults = true; // Показывает промежуточные результаты
+            recognition.lang = 'ru-RU';
+
+            recognition.onstart = function() {
+                console.log('Распознавание речи началось. Пожалуйста, говорите.');
+            };
+
+            recognition.onresult = function(event) {
+                let interimTranscript = '';
+                let finalTranscript = '';
+
+                for (let i = 0; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript + ' ';
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+                
+                // Показ промежуточного и окончательного текста
+                document.getElementById('transcript').value = finalTranscript + interimTranscript;
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Ошибка распознавания: ', event.error);
+            };
+
+            recognition.onend = function() {
+                console.log('Распознавание завершено. Перезапуск...');
+                recognition.start(); // Перезапуск для непрерывного распознавания
+            };
+
+            recognition.start();
+        };
+
+        function copyToClipboard() {
+            const transcript = document.getElementById('transcript');
+            transcript.select();
+            document.execCommand('copy');
+            alert('Текст скопирован в буфер обмена!');
+        }
+    </script>
+    
 </body>
 </html>
