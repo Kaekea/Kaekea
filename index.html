@@ -89,5 +89,56 @@
     </a><br>
 </div>
 
+    <!-- CSS для кнопок по сторонам экрана -->
+<style>
+    /* Основной стиль для кнопок */
+    .side-button {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        background-color: #3498db;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 50%;
+        text-decoration: none;
+        animation: float 3s infinite ease-in-out;
+        z-index: 1000; /* Поверх основного содержимого страницы */
+    }
+
+    /* Левая кнопка */
+    .side-button.left {
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Правая кнопка */
+    .side-button.right {
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Анимация для движения вверх-вниз */
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(-50%) translateY(0);
+        }
+        50% {
+            transform: translateY(-50%) translateY(-20px);
+        }
+    }
+</style>
+
+<!-- Кнопки по сторонам экрана -->
+<a href="page1.html" class="side-button left">Переброс</a>
+<a href="page2.html" class="side-button right">Переброс</a>
+
+
 </body>
 </html>
