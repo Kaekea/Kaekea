@@ -3,30 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Катающиеся ссылки с переносом</title>
+    <title>Переливающиеся и морфирующие ссылки</title>
     <style>
-        /* Контейнер для анимации */
+        /* Контейнер для центрирования текста */
         .container {
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
         }
 
-        /* Анимация для ссылок */
-        .moving-link {
-            display: inline-block;
-            font-size: 20px;
-            animation: move 20s linear infinite alternate; /* Медленное движение */
+        /* Стиль и анимация для ссылок */
+        .morphing-link {
+            font-size: 5em; /* Увеличиваем размер текста */
+            color: #3498db;
+            font-weight: bold;
+            text-decoration: none;
+            animation: morph 3s infinite alternate, colorShift 5s infinite;
         }
 
-        /* Ключевые кадры для анимации */
-        @keyframes move {
+        /* Анимация для изменения формы текста */
+        @keyframes morph {
             0% {
-                transform: translateX(0);
+                transform: scale(1) rotate(0deg);
+            }
+            50% {
+                transform: scale(1.2) rotate(10deg);
             }
             100% {
-                transform: translateX(calc(100vw - 100%));
+                transform: scale(1) rotate(-10deg);
+            }
+        }
+
+        /* Анимация для переливания цвета */
+        @keyframes colorShift {
+            0% {
+                color: #3498db;
+            }
+            25% {
+                color: #9b59b6;
+            }
+            50% {
+                color: #e74c3c;
+            }
+            75% {
+                color: #f1c40f;
+            }
+            100% {
+                color: #3498db;
             }
         }
     </style>
@@ -34,8 +60,8 @@
 <body>
 
 <div class="container">
-    <a href="audiotools.html" class="moving-link">AudioTools</a><br>
-    <a href="gameXO.html" class="moving-link">gameXO</a><br>
+    <a href="audiotools.html" class="morphing-link">AudioTools</a><br>
+    <a href="gameXO.html" class="morphing-link">gameXO</a><br>
 </div>
 
 </body>
