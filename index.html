@@ -261,6 +261,155 @@
             document.execCommand('copy');
             alert('Текст скопирован в буфер обмена!');
         }
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра Крестики-Нолики</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(30, 40px);
+            grid-gap: 5px;
+        }
+
+        .custom-button {
+            background-color: #04AA6D;
+            border: none;
+            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 24px;
+            color: transparent;
+        }
+
+        .custom-button:hover {
+            background-color: red;
+        }
+
+        .active {
+            background-color: yellow;
+        }
+
+        .highlight {
+            background-color: red;
+        }
+
+        .cross {
+            color: black;
+        }
+
+        .circle {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid">
+        <script>
+            const grid = document.querySelector('.grid');
+            let currentPlayer = 'X';
+            const buttons = [];
+            
+            for (let i = 0; i < 900; i++) {
+                const button = document.createElement('button');
+                button.classList.add('custom-button');
+                buttons.push(button);
+                
+                button.addEventListener('click', function() {
+                    if (!button.classList.contains('active') && !button.textContent) {
+                        button.classList.add('active');
+                        button.textContent = currentPlayer === 'X' ? '✖' : '⭕';
+                        button.classList.add(currentPlayer === 'X' ? 'cross' : 'circle');
+
+                        if (checkWin(buttons, Math.floor(i / 30), i % 30, currentPlayer)) {
+                            // Подсветка выигрышных клеток
+                        } else {
+                            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                        }
+                    }
+                });
+
+                grid.appendChild(button);
+            }
+
+            function checkWin(buttons, row, col, player) {
+                const target = player === 'X' ? '✖' : '⭕';
+                return (
+                    checkDirection(buttons, row, col, target, 1, 0) || 
+                    checkDirection(buttons, row, col, target, 0, 1) || 
+                    checkDirection(buttons, row, col, target, 1, 1) || 
+                    checkDirection(buttons, row, col, target, 1, -1)
+                );
+            }
+
+            function checkDirection(buttons, row, col, target, deltaRow, deltaCol) {
+                let count = 1;
+                const winningButtons = [buttons[row * 30 + col]];
+
+                for (let i = 1; i < 5; i++) {
+                    const newRow = row + deltaRow * i;
+                    const newCol = col + deltaCol * i;
+                    if (newRow >= 0 && newRow < 30 && newCol >= 0 && newCol < 30 && buttons[newRow * 30 + newCol].textContent === target) {
+                        count++;
+                        winningButtons.push(buttons[newRow * 30 + newCol]);
+                    } else {
+                        break;
+                    }
+                }
+
+                for (let i = 1; i < 5; i++) {
+                    const newRow = row - deltaRow * i;
+                    const newCol = col - deltaCol * i;
+                    if (newRow >= 0 && newRow < 30 && newCol >= 0 && newCol < 30 && buttons[newRow * 30 + newCol].textContent === target) {
+                        count++;
+                        winningButtons.push(buttons[newRow * 30 + newCol]);
+                    } else {
+                        break;
+                    }
+                }
+
+                if (count >= 5) {
+                    highlightWinningButtons(winningButtons);
+                    return true;
+                }
+                return false;
+            }
+
+            function highlightWinningButtons(buttons) {
+                buttons.forEach(button => {
+                    button.classList.remove('active');
+                    button.classList.add('highlight');
+                });
+                setTimeout(resetGame, 3000); // Увеличено время ожидания до 6 секунд
+            }
+
+            function resetGame() {
+                buttons.forEach(button => {
+                    button.textContent = '';
+                    button.classList.remove('active', 'highlight', 'cross', 'circle');
+                });
+                currentPlayer = 'X';
+            }
+        </script>
+    </div>
+
+</body>
+</html>
+
     </script>
     
 </body>
