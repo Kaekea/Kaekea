@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Катающиеся ссылки</title>
+    <title>Катающиеся ссылки с переносом</title>
     <style>
         /* Контейнер для анимации */
         .container {
-            display: flex;
-            gap: 20px;
+            display: inline-block;
             position: relative;
             overflow: hidden;
-            white-space: nowrap;
             width: 100%;
         }
 
@@ -19,7 +17,7 @@
         .moving-link {
             display: inline-block;
             font-size: 20px;
-            animation: move 10s linear infinite alternate;
+            animation: move 10s linear infinite alternate; /* Медленное движение */
         }
 
         /* Ключевые кадры для анимации */
