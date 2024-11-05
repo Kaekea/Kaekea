@@ -1,2 +1,44 @@
-<a href="audiotools.html">AudioTools</a><br>
-<a href="gameXO.html">gameXO</a><br>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Катающиеся ссылки</title>
+    <style>
+        /* Контейнер для анимации */
+        .container {
+            display: flex;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        /* Анимация для ссылок */
+        .moving-link {
+            display: inline-block;
+            font-size: 20px;
+            animation: move 5s linear infinite alternate;
+        }
+
+        /* Ключевые кадры для анимации */
+        @keyframes move {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(100vw - 100%));
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="audiotools.html" class="moving-link">AudioTools</a>
+    <a href="gameXO.html" class="moving-link">gameXO</a>
+</div>
+
+</body>
+</html>
