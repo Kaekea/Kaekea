@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переливающиеся и морфирующие ссылки</title>
+    <title>Переливающиеся и морфирующие ссылки с волной</title>
     <style>
         /* Контейнер для центрирования текста */
         .container {
@@ -15,25 +15,29 @@
             text-align: center;
         }
 
-        /* Стиль и анимация для ссылок */
+        /* Стиль для ссылок */
         .morphing-link {
             font-size: 5em; /* Увеличиваем размер текста */
             color: #3498db;
             font-weight: bold;
             text-decoration: none;
-            animation: morph 3s infinite alternate, colorShift 5s infinite;
+            display: inline-block;
+            animation: colorShift 5s infinite;
         }
 
-        /* Анимация для изменения формы текста */
-        @keyframes morph {
-            0% {
-                transform: scale(1) rotate(0deg);
+        /* Эффект волны для каждой буквы */
+        .wave span {
+            display: inline-block;
+            animation: wave 1s infinite ease-in-out;
+        }
+
+        /* Ключевые кадры для анимации волны */
+        @keyframes wave {
+            0%, 100% {
+                transform: translateY(0);
             }
             50% {
-                transform: scale(1.2) rotate(10deg);
-            }
-            100% {
-                transform: scale(1) rotate(-10deg);
+                transform: translateY(-20px);
             }
         }
 
@@ -60,8 +64,27 @@
 <body>
 
 <div class="container">
-    <a href="audiotools.html" class="morphing-link">AudioTools</a><br>
-    <a href="gameXO.html" class="morphing-link">gameXO</a><br>
+    <a href="audiotools.html" class="morphing-link wave">
+        <!-- Каждая буква обернута в <span> для волнового эффекта -->
+        <span style="animation-delay: 0s">A</span>
+        <span style="animation-delay: 0.1s">u</span>
+        <span style="animation-delay: 0.2s">d</span>
+        <span style="animation-delay: 0.3s">i</span>
+        <span style="animation-delay: 0.4s">o</span>
+        <span style="animation-delay: 0.5s">T</span>
+        <span style="animation-delay: 0.6s">o</span>
+        <span style="animation-delay: 0.7s">o</span>
+        <span style="animation-delay: 0.8s">l</span>
+        <span style="animation-delay: 0.9s">s</span>
+    </a><br>
+    <a href="gameXO.html" class="morphing-link wave">
+        <span style="animation-delay: 0s">g</span>
+        <span style="animation-delay: 0.1s">a</span>
+        <span style="animation-delay: 0.2s">m</span>
+        <span style="animation-delay: 0.3s">e</span>
+        <span style="animation-delay: 0.4s">X</span>
+        <span style="animation-delay: 0.5s">O</span>
+    </a><br>
 </div>
 
 </body>
