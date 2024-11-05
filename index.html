@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переливающиеся и морфирующие ссылки с волной</title>
+    <title>Переливающиеся и морфирующие ссылки с волной и увеличением</title>
     <style>
         /* Контейнер для центрирования текста */
         .container {
@@ -25,19 +25,19 @@
             animation: colorShift 5s infinite;
         }
 
-        /* Эффект волны для каждой буквы */
+        /* Эффект волны и увеличения для каждой буквы */
         .wave span {
             display: inline-block;
-            animation: wave 5s infinite ease-in-out;
+            animation: wave 3s infinite ease-in-out;
         }
 
-        /* Ключевые кадры для анимации волны */
+        /* Ключевые кадры для анимации волны с увеличением */
         @keyframes wave {
             0%, 100% {
-                transform: translateY(0);
+                transform: translateY(0) scale(1); /* Начальная позиция и размер */
             }
             50% {
-                transform: translateY(-100px);
+                transform: translateY(-20px) scale(1.2); /* Подъем и увеличение */
             }
         }
 
@@ -74,18 +74,4 @@
         <span style="animation-delay: 0.5s">T</span>
         <span style="animation-delay: 0.6s">o</span>
         <span style="animation-delay: 0.7s">o</span>
-        <span style="animation-delay: 0.8s">l</span>
-        <span style="animation-delay: 0.9s">s</span>
-    </a><br>
-    <a href="gameXO.html" class="morphing-link wave">
-        <span style="animation-delay: 0s">g</span>
-        <span style="animation-delay: 0.1s">a</span>
-        <span style="animation-delay: 0.2s">m</span>
-        <span style="animation-delay: 0.3s">e</span>
-        <span style="animation-delay: 0.4s">X</span>
-        <span style="animation-delay: 0.5s">O</span>
-    </a><br>
-</div>
-
-</body>
-</html>
+        <span 
