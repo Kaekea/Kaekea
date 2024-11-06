@@ -3,89 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта с переключением между Google, Яндекс, OSM и спутниковыми картами</title>
+    <title>Переливающиеся и морфирующие ссылки с волной и увеличением</title>
     <style>
-        /* Основной стиль для контейнера и кнопок */
-        .map-container {
-            width: 100%;
-            height: 500px;
-            position: relative;
-        }
-
-        .map-frame {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: none; /* Скрываем карты по умолчанию */
-        }
-
-        .map-frame.active {
-            display: block; /* Отображаем только активную карту */
-        }
-
-        .buttons {
+        /* Контейнер для центрирования текста */
+        .container {
             display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            min-height: 100vh; /* Минимальная высота экрана */
+            text-align: center;
+            overflow: visible; /* Убедимся, что ничего не обрезается */
         }
 
-        .buttons button {
-            padding: 10px 20px;
-            margin: 0 5px;
-            font-size: 16px;
-            cursor: pointer;
+        /* Стиль для ссылок */
+        .morphing-link {
+            font-size: 5em; /* Увеличиваем размер текста */
+            color: #3498db;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            animation: colorShift 10s infinite; /* Замедлили цветовое переливание */
+            white-space: nowrap; /* Предотвращает перенос текста */
+        }
+
+        /* Эффект волны и увеличения для каждой буквы */
+        .wave span {
+            display: inline-block;
+            animation: wave 3s infinite ease-in-out; /* Замедлили анимацию волны */
+        }
+
+        /* Ключевые кадры для анимации волны с увеличением */
+        @keyframes wave {
+            0%, 100% {
+                transform: translateY(0) scale(1); /* Начальная позиция и размер */
+            }
+            50% {
+                transform: translateY(-20px) scale(1.2); /* Подъем и увеличение */
+            }
+        }
+
+        /* Анимация для переливания цвета */
+        @keyframes colorShift {
+            0% {
+                color: #3498db;
+            }
+            25% {
+                color: #9b59b6;
+            }
+            50% {
+                color: #e74c3c;
+            }
+            75% {
+                color: #f1c40f;
+            }
+            100% {
+                color: #3498db;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="buttons">
-    <button onclick="switchMap('google')">Google Maps</button>
-    <button onclick="switchMap('google_satellite')">Google Спутник</button>
-    <button onclick="switchMap('yandex')">Яндекс Карты</button>
-    <button onclick="switchMap('yandex_satellite')">Яндекс Спутник</button>
-    <button onclick="switchMap('osm')">OpenStreetMap</button>
+<div class="container">
+    <a href="audiotools.html" class="morphing-link wave">
+        <!-- Каждая буква обернута в <span> для волнового эффекта -->
+        <span style="animation-delay: 0s">A</span>
+        <span style="animation-delay: 0.2s">u</span>
+        <span style="animation-delay: 0.4s">d</span>
+        <span style="animation-delay: 0.6s">i</span>
+        <span style="animation-delay: 0.8s">o</span>
+        <span style="animation-delay: 1s">T</span>
+        <span style="animation-delay: 1.2s">o</span>
+        <span style="animation-delay: 1.4s">o</span>
+        <span style="animation-delay: 1.6s">l</span>
+        <span style="animation-delay: 1.8s">s</span>
+    </a><br>
+    <a href="gameXO.html" class="morphing-link wave">
+        <span style="animation-delay: 0s">g</span>
+        <span style="animation-delay: 0.2s">a</span>
+        <span style="animation-delay: 0.4s">m</span>
+        <span style="animation-delay: 0.6s">e</span>
+        <span style="animation-delay: 0.8s">X</span>
+        <span style="animation-delay: 1s">O</span>
+       <a href="games.html" class="morphing-link wave"> 
+        <span style="animation-delay: 0s">g</span>
+        <span style="animation-delay: 0.2s">a</span>
+        <span style="animation-delay: 0.4s">m</span>
+        <span style="animation-delay: 0.6s">e</span>
+        <span style="animation-delay: 0.8s">s</span>
+       <a href="maps.html" class="morphing-link wave"> 
+        <span style="animation-delay: 0s">m</span>
+        <span style="animation-delay: 0.2s">a</span>
+        <span style="animation-delay: 0.4s">p</span>
+        <span style="animation-delay: 0.6s">s</span>
+    </a><br>
 </div>
 
-<div class="map-container">
-    <!-- Google Maps -->
-    <iframe id="google" class="map-frame active" 
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3151.835434509529!2d144.9631!3d-37.8136!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x2a5bb87d69739aa7!2zTWFwcCBvZiBNZWxib3VybmUsIEF1c3RyYWxpYQ!5e0!3m2!1sen!2sus!4v1615276552343!5m2!1sen!2sus" 
-            frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-    
-    <!-- Google Satellite Maps -->
-    <iframe id="google_satellite" class="map-frame" 
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3151.835434509529!2d144.9631!3d-37.8136!3m2!1i1024!2i768!4f13.1!4m3!3m2!1s0x0%3A0x2a5bb87d69739aa7!2sMelbourne%20VIC%2C%20Australia!5e0!5m2!1sen!2sus!3m1!1i32" 
-            frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-
-    <!-- Яндекс Карты -->
-    <iframe id="yandex" class="map-frame" 
-            src="https://yandex.ru/map-widget/v1/?ll=144.9631%2C-37.8136&z=14" 
-            frameborder="0"></iframe>
-    
-    <!-- Яндекс Спутниковые Карты -->
-    <iframe id="yandex_satellite" class="map-frame" 
-            src="https://yandex.ru/map-widget/v1/?l=sat&ll=144.9631%2C-37.8136&z=14" 
-            frameborder="0"></iframe>
-    
-    <!-- OpenStreetMap -->
-    <iframe id="osm" class="map-frame" 
-            src="https://www.openstreetmap.org/export/embed.html?bbox=144.946457%2C-37.823269%2C144.963421%2C-37.812643&layer=mapnik" 
-            frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-</div>
-
-<script>
-    function switchMap(mapId) {
-        // Сначала скрываем все карты
-        document.querySelectorAll('.map-frame').forEach(map => {
-            map.classList.remove('active');
-        });
-        // Отображаем выбранную карту
-        document.getElementById(mapId).classList.add('active');
+    <!-- CSS для кнопок по сторонам экрана -->
+<style>
+    /* Основной стиль для кнопок */
+    .side-button {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        background-color: #3498db;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 50%;
+        text-decoration: none;
+        animation: float 3s infinite ease-in-out;
+        z-index: 1000; /* Поверх основного содержимого страницы */
     }
-</script>
 
+    /* Левая кнопка */
+    .side-button.left {
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Правая кнопка */
+    .side-button.right {
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Анимация для движения вверх-вниз */
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(-50%) translateY(0);
+        }
+        50% {
+            transform: translateY(-50%) translateY(-20px);
+        }
+    }    
+</style>
 </body>
 </html>
