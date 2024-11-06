@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта с переключением между Google, Яндекс и OSM</title>
+    <title>Карта с переключением между Google, Яндекс, OSM и спутниковыми картами</title>
     <style>
         /* Основной стиль для контейнера и кнопок */
         .map-container {
@@ -43,24 +43,36 @@
 
 <div class="buttons">
     <button onclick="switchMap('google')">Google Maps</button>
+    <button onclick="switchMap('google_satellite')">Google Спутник</button>
     <button onclick="switchMap('yandex')">Яндекс Карты</button>
+    <button onclick="switchMap('yandex_satellite')">Яндекс Спутник</button>
     <button onclick="switchMap('osm')">OpenStreetMap</button>
 </div>
 
 <div class="map-container">
     <!-- Google Maps -->
     <iframe id="google" class="map-frame active" 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509529!2d144.95373631550465!3d-37.816279442021814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d43f0fdfd07%3A0xf0727c4b0bbfbbd3!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2sru!4v1615181425475!5m2!1sen!2sru" 
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3151.835434509529!2d144.9631!3d-37.8136!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x2a5bb87d69739aa7!2zTWFwcCBvZiBNZWxib3VybmUsIEF1c3RyYWxpYQ!5e0!3m2!1sen!2sus!4v1615276552343!5m2!1sen!2sus" 
             frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
     
+    <!-- Google Satellite Maps -->
+    <iframe id="google_satellite" class="map-frame" 
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3151.835434509529!2d144.9631!3d-37.8136!3m2!1i1024!2i768!4f13.1!4m3!3m2!1s0x0%3A0x2a5bb87d69739aa7!2sMelbourne%20VIC%2C%20Australia!5e0!5m2!1sen!2sus!3m1!1i32" 
+            frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+
     <!-- Яндекс Карты -->
     <iframe id="yandex" class="map-frame" 
-            src="https://yandex.ru/map-widget/v1/?um=constructor%3A3d5bf9a5adfd7ae5c5cf695d8a09d88ffb1f9f191a2025fdd3afdf2d50085882&amp;source=constructor" 
+            src="https://yandex.ru/map-widget/v1/?ll=144.9631%2C-37.8136&z=14" 
+            frameborder="0"></iframe>
+    
+    <!-- Яндекс Спутниковые Карты -->
+    <iframe id="yandex_satellite" class="map-frame" 
+            src="https://yandex.ru/map-widget/v1/?l=sat&ll=144.9631%2C-37.8136&z=14" 
             frameborder="0"></iframe>
     
     <!-- OpenStreetMap -->
     <iframe id="osm" class="map-frame" 
-            src="https://www.openstreetmap.org/export/embed.html?bbox=144.946457%2C-37.823269%2C144.963421%2C-37.812643&amp;layer=mapnik" 
+            src="https://www.openstreetmap.org/export/embed.html?bbox=144.946457%2C-37.823269%2C144.963421%2C-37.812643&layer=mapnik" 
             frameborder="0" style="border:0;" allowfullscreen=""></iframe>
 </div>
 
