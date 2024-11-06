@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта с переключением между Google, Яндекс, OSM и спутниковыми картами</title>
+    <title>Карта с переключением между Google, Яндекс, OSM и Esri</title>
     <style>
         /* Основной стиль для контейнера и кнопок */
         .map-container {
@@ -47,6 +47,7 @@
     <button onclick="switchMap('yandex')">Яндекс Карты</button>
     <button onclick="switchMap('yandex_satellite')">Яндекс Спутник</button>
     <button onclick="switchMap('osm')">OpenStreetMap</button>
+    <button onclick="switchMap('esri')">Esri</button>
 </div>
 
 <div class="map-container">
@@ -73,6 +74,11 @@
     <!-- OpenStreetMap -->
     <iframe id="osm" class="map-frame" 
             src="https://www.openstreetmap.org/export/embed.html?bbox=144.946457%2C-37.823269%2C144.963421%2C-37.812643&layer=mapnik" 
+            frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+
+    <!-- Esri Map -->
+    <iframe id="esri" class="map-frame" 
+            src="https://www.arcgis.com/apps/instant/basic/index.html?appid=10df2279f9684e4a9f6a7f08febac2a9&center=144.9631,-37.8136&level=14" 
             frameborder="0" style="border:0;" allowfullscreen=""></iframe>
 </div>
 
