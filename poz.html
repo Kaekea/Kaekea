@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Микрофон</title>
+    <style>
+        /* Основной стиль для отображения активности */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #status {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+
+        #volume {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: lightcoral;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+            transition: transform 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <div id="volume">🎤</div>
+    <div id="status">Ожидание разрешения на доступ к микрофону...</div>
+</div>
+
+<script>
+    // Проверка доступа к микрофону
+    async function startMicrophone() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            document.getElementById('status').innerText = 'Микрофон включен';
+
+            // Аудио-контекст для анализа громкости
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const analyser = audioContext.createAnalyser();
+            const source = audioContext.createMediaStreamSource(stream);
+            source.connect(analyser);
+            analyser.fftSize = 256;
+
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+            // Обновление громкости
+            function updateVolume() {
+                analyser.getByteFrequencyData(dataArray);
+                let sum = 0;
+                for (let i = 0; i < dataArray.length; i++) {
+                    sum += dataArray[i];
+                }
+                const volume = sum / dataArray.length;
+                
+                // Изменение размера элемента в зависимости от громкости
+                const volumeElement = document.getElementById('volume');
+                volumeElement.style.transform = `scale(${1 + volume / 100})`;
+
+                requestAnimationFrame(updateVolume);
+            }
+
+            updateVolume();
+        } catch (error) {
+            document.getElementById('status').innerText = 'Доступ к микрофону отклонен';
+            console.error('Ошибка доступа к микрофону:', error);
+        }
+    }
+
+    // Запуск функции при загрузке страницы
+    startMicrophone();
+</script>
+
+</body>
+</html>
