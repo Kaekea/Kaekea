@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Случайная радиостанция</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #play-button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        #station-info {
+            margin-top: 20px;
+            font-size: 1em;
+        }
+        audio {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Случайная мировая радиостанция</h1>
+<button id="play-button">Слушать случайную станцию</button>
+<div id="station-info">Нажмите, чтобы начать</div>
+<audio id="audio-player" controls></audio>
+
+<script>
+    async function playRandomStation() {
+        const apiUrl = "https://at1.api.radio-browser.info/json/stations";
+        
+        try {
+            const response = await fetch(apiUrl);
+            const stations = await response.json();
+            
+            if (stations.length > 0) {
+                const randomStation = stations[Math.floor(Math.random() * stations.length)];
+                const audioPlayer = document.getElementById('audio-player');
+                const stationInfo = document.getElementById('station-info');
+                
+                audioPlayer.src = randomStation.url_resolved;
+                audioPlayer.play();
+                
+                stationInfo.innerText = `Сейчас играет: ${randomStation.name} (${randomStation.country})`;
+            } else {
+                alert("Не удалось найти радиостанции");
+            }
+        } catch (error) {
+            console.error("Ошибка при получении радиостанций:", error);
+            alert("Ошибка при загрузке радиостанций. Попробуйте снова.");
+        }
+    }
+
+    document.getElementById('play-button').onclick = playRandomStation;
+</script>
+
+</body>
+</html>
