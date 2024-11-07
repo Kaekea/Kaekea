@@ -1,97 +1,297 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта с переключением между Google, Яндекс, OSM и Esri</title>
+    <!-- Указываем стандарт документа HTML -->
+    <meta charset="UTF-8"> <!-- Устанавливаем кодировку UTF-8 для поддержки русского и других языков -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Устанавливаем масштабирование страницы для корректного отображения на мобильных устройствах -->
+    <title>Кадастровая Карта России</title> <!-- Заголовок страницы -->
+
+    <!-- Подключаем стили для карты Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <!-- Подключаем библиотеку Leaflet для работы с картами -->
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=MubdxYPlxKiKjjYbRQ_CnkomC38SLsFd36a4TPMvrPchdND-jzu5LtEkDBpHola5givV89A4O5w69eP0QK2VhWBKhs6nHP4Kg8hqP5_5LErqVopYbB5pBAXFGZT5izuwOgci32qBXUNNdA86jOtVkyxxyfoTBDuw8tkyCW7ibN7Y5jvmDUHaSfAy0HqehGfFk4E05QE2kMMaHRD_n-yLkTppGcHt46SoLLNQYg1tDE-cAwd-MFckpK-yRZGyOKlaVW0cb3fdBJYRcsdiuoEp0qlGSo_VXvTOaXSUTs6uwuH8scXiJwYY96irbiutwCbEwZdhMzpUq5L7658sr-1odPQULKyr0BFTW3XVxSv9CAA5tWYTpXyXdRZnMw4wbgEAwX0ou1R_jeI6IbqC7ZvlAw5EUxExN12tXjk6ujTYy-V19g9AoykiihJHEh_w4HBS509WfDJX04mLRqSbITs6WHYABgx8EzECnNkO64wSI-YOCz7qlIK61fu7eQQLiA7AUSmVXnmW5X3v3uvmCNUC7DExm6JvBhZLu2KqZvVXoghB_Pj7tWkWv8Ns6awCR4oSuu7_8B24Qczk66xi0Ng8OElzrrzK8pYDgvv_Xvbc1HxwUWRCKlX4gtGSOCCxhCe0z3N-w9PbNzbyqk84mqLLN6dH1Spa3yvZ18l5zwqwL2vtYRRpceGt4aN6CQj1lR-AWMlvJJ7UFmhpYH3dVPwh6PyZllrXIBF_V5GxNzkwogoJqNMYqNBwTir0xYtBcUMIUY9JyYynkBNAiYvT37HeE6PchG99BqQnuWGqaMJw0_XPteSOIgtILgDfL_2p5NKqJxXzFOMOJSb7nD6b29DzJ6XbVZii0uvmAxLxQ-kUOO0LxkqTY2eFnkbx5tSWZJRxdss5oNqhGHsM8T2EHI4KIJk_xjihkzTkfksMOMBJo7f2YUokB7UU5u6I7jQxpmfmRkk81AkPJRJzMjGvUZ8IdAIya4LPznPOCf8D4HQ5vGg7pspbUOLrdEZiER185uIhYtKupSRdEZWhXtqTAdhEdCyYc8FxhLXCFAgIZvCB1KUtEcUrBqjZwePim5j-9jFlt2vKpcD5vNekSALTTFV1TLsh1QMT6_8n8wIio9825nf2OK5szpm7Q0qOX69PZGaJEaUoYnepueEQi9jg_kY2OXRLOpd5yaSAhoSSUl0KATsjTIjNi8uEpZmkyJa6YwSsPuRRT9EWAANmzUVelsh49Yr1evwBOPCO1U8Zu644rvTzggSV0DPcv9GyANLFHk--Be_K_XL_IB3GU9HdtiXZs9oodvx3I1s_Ns69tvmQjaj99sP2V8ii7qc60wjlyTW2rDZBWhHZhRtbaYDxXGmntrA1MVvsGC6hj9-h-T2cnr9OvAmFMdH7W4L2lNkQbizp0T6nOFhVpy5u1klT_I0gjpZ3W2xk1df6C3MWLpBitAeys56mmHz7hRmwallc8MmMHWW7bpLwBa4M4YBncgUG0miXFjQSrIGWQ_7w3rTdjbqrNNCzrKiJdzqWKil-eaXOPNTSZKIGQ74CPr_-tzqrgmI_7uV96_ahQUcYkH5JUKMwM-Ha3mRn0IUGJijLhSzbGjpCCvDZYlYd93Xfgx-cO7eSaKmnMEpEw8xMHATF8qHNFEZGEtp3PrgM7v0GlxWfUfxCapyWs0RzHChxF3V1nee_U7bZBunwSbuSMerSeEGcdhjaFpetGjIsFPPb7d_g" nonce="8738c821fd323ebf35e3dc4d59509c62" charset="UTF-8"></script><script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <!-- Подключаем библиотеку Esri для взаимодействия с картами Esri в Leaflet -->
+    <script src="https://unpkg.com/esri-leaflet@3.0.1/dist/esri-leaflet.js"></script>
+    <!-- Подключаем Яндекс карты с использованием API-ключа -->
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=<YOUR_YANDEX_API_KEY>" type="text/javascript"></script>
+    <!-- Подключаем Bing карты с использованием API-ключа -->
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=<YOUR_BING_API_KEY>' async defer></script>
+    
     <style>
-        /* Основной стиль для контейнера и кнопок */
-        .map-container {
-            width: 100%;
-            height: 500px;
-            position: relative;
+        body {
+            font-family: Arial, sans-serif; /* Устанавливаем шрифт страницы */
         }
-
-        .map-frame {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: none; /* Скрываем карты по умолчанию */
+        #leafletMap, #yandexMap, #bingMap {
+            height: 100%; /* Высота карты на весь экран */
+            width: 100%; /* Ширина карты на весь экран */
+            position: absolute; /* Фиксируем карты относительно экрана */
+            top: 0px; /* Ставим карты сверху экрана */
+            left: 0; /* Начинаем карты с левого края экрана */
         }
-
-        .map-frame.active {
-            display: block; /* Отображаем только активную карту */
+        #yandexMap, #bingMap {
+            display: none; /* По умолчанию скрываем Яндекс и Bing карты */
         }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
+        #mapSelectorContainer {
+            position: absolute; /* Фиксируем контейнер выбора карты */
+            top: 10px; /* Отступ сверху */
+            left: 10px; /* Отступ слева */
+            z-index: 1000; /* Устанавливаем высокий приоритет для отображения поверх карт */
+            display: grid; /* Используем сетку для кнопок выбора карты */
+            grid-template-columns: 1fr 1fr 1fr; /* Три столбца с равной шириной */
+            gap: 5px; /* Промежутки между кнопками */
+            background: white; /* Фон контейнера - белый */
+            padding: 5px; /* Внутренний отступ контейнера */
+            border-radius: 10px; /* Скругляем углы контейнера */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Добавляем тень для улучшения визуального восприятия */
         }
-
-        .buttons button {
-            padding: 10px 20px;
-            margin: 0 5px;
-            font-size: 16px;
-            cursor: pointer;
+        .map-button {
+            padding: 5px; /* Внутренний отступ кнопки */
+            text-align: center; /* Текст по центру кнопки */
+            border-radius: 5px; /* Скругляем углы кнопки */
+            background-color: #f0f0f0; /* Цвет фона кнопки */
+            cursor: pointer; /* Изменяем курсор при наведении на кнопку */
+            transition: background-color 0.3s; /* Плавное изменение фона кнопки при наведении */
+            font-size: 0.8em; /* Размер шрифта кнопки */
+        }
+        .map-button:hover {
+            background-color: #e0e0e0; /* Цвет кнопки при наведении мыши */
+        }
+        .map-button.active {
+            background-color: #d0d0d0; /* Цвет кнопки, когда она активна */
         }
     </style>
+    <script type="text/javascript">
+        /**
+         * Инициализация Bing Maps
+         * Создает карту Bing и добавляет возможность выбора типа карты (схема или спутник)
+         */
+        function loadBingMapScenario() {
+            var bingMap = new Microsoft.Maps.Map(document.getElementById('bingMap'), {
+                credentials: '<YOUR_BING_API_KEY>', // API-ключ для доступа к картам Bing
+                mapTypeId: Microsoft.Maps.MapTypeId.aerial, // Начальный вид карты - спутниковый
+                center: new Microsoft.Maps.Location(currentCenter[0], currentCenter[1]), // Устанавливаем центр карты с использованием глобальных координат
+                zoom: currentZoom // Устанавливаем начальный уровень приближения
+            });
+
+            // Добавляем элемент выбора типа карты для Bing Maps
+            var typeSelector = document.createElement('select');
+            typeSelector.innerHTML = `
+                <option value="road">Схема</option>
+                <option value="aerial">Спутник</option>
+            `;
+            typeSelector.addEventListener('change', function () {
+                var selectedType = typeSelector.value;
+                bingMap.setView({ mapTypeId: Microsoft.Maps.MapTypeId[selectedType] }); // Меняем тип карты в зависимости от выбранного значения
+            });
+            document.getElementById('mapControl').appendChild(typeSelector);
+
+            // Обновляем глобальные координаты и уровень зума при изменении вида карты Bing
+            Microsoft.Maps.Events.addHandler(bingMap, 'viewchangeend', function () {
+                var center = bingMap.getCenter(); // Получаем текущий центр карты
+                currentCenter = [center.latitude, center.longitude]; // Сохраняем координаты в глобальной переменной
+                currentZoom = bingMap.getZoom(); // Сохраняем текущий уровень приближения
+            });
+
+            return bingMap; // Возвращаем объект карты Bing
+        }
+    </script>
 </head>
 <body>
+    <!-- Контейнеры для отображения различных карт -->
+    <div id="leafletMap"></div> <!-- Контейнер для карты Leaflet -->
+    <div id="yandexMap"></div> <!-- Контейнер для карты Яндекс -->
+    <div id="bingMap"></div> <!-- Контейнер для карты Bing -->
+    <div id="mapSelectorContainer">
+        <!-- Кнопки для выбора различных типов карт -->
+        <div class="map-button" data-layer="osm">OpenStreetMap</div>
+        <div class="map-button"></div> <!-- Пустой элемент, возможно для будущих слоев или интерфейсной логики -->
+        <div class="map-button"></div> <!-- Пустой элемент, возможно для будущих слоев или интерфейсной логики -->
+        <div class="map-button" data-layer="google">Google Maps</div>
+        <div class="map-button" data-layer="googleHybrid">Google Hybrid</div>
+        <div class="map-button" data-layer="googleSat">Google Satellite</div>
+        <div class="map-button" data-layer="yandex">Yandex Maps</div>
+        <div class="map-button" data-layer="yandexHybrid">Yandex Hybrid</div>
+        <div class="map-button" data-layer="yandexSat">Yandex Satellite</div>
+        <div class="map-button" data-layer="esriTopo">Esri Map</div>
+        <div class="map-button" data-layer="esriHybrid">Esri Hybrid</div>
+        <div class="map-button" data-layer="esri">Esri Satellite</div>
+        <div class="map-button" data-layer="bing">Bing Maps</div>
+        <div class="map-button" data-layer="bingHybrid">Bing Hybrid</div>
+        <div class="map-button" data-layer="bingSat">Bing Satellite</div>
+    </div>
 
-<div class="buttons">
-    <button onclick="switchMap('google')">Google Maps</button>
-    <button onclick="switchMap('google_satellite')">Google Спутник</button>
-    <button onclick="switchMap('yandex')">Яндекс Карты</button>
-    <button onclick="switchMap('yandex_satellite')">Яндекс Спутник</button>
-    <button onclick="switchMap('osm')">OpenStreetMap</button>
-    <button onclick="switchMap('esri')">Esri</button>
-</div>
+    <script>
+        // Глобальные переменные для хранения текущих координат и уровня приближения карты
+        var currentCenter = [55.751244, 37.618423]; // Координаты центра карты (Москва)
+        var currentZoom = 10; // Начальный уровень приближения
 
-<div class="map-container">
-    <!-- Google Maps -->
-    <iframe id="google" class="map-frame active" 
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3151.835434509529!2d144.9631!3d-37.8136!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x2a5bb87d69739aa7!2zTWFwcCBvZiBNZWxib3VybmUsIEF1c3RyYWxpYQ!5e0!3m2!1sen!2sus!4v1615276552343!5m2!1sen!2sus" 
-            frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-    
-    <!-- Google Satellite Maps -->
-    <iframe id="google_satellite" class="map-frame" 
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3151.835434509529!2d144.9631!3d-37.8136!3m2!1i1024!2i768!4f13.1!4m3!3m2!1s0x0%3A0x2a5bb87d69739aa7!2sMelbourne%20VIC%2C%20Australia!5e0!5m2!1sen!2sus!3m1!1i32" 
-            frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        // Инициализация карты Leaflet с текущими координатами и уровнем приближения
+        var leafletMap = L.map('leafletMap').setView(currentCenter, currentZoom);
 
-    <!-- Яндекс Карты -->
-    <iframe id="yandex" class="map-frame" 
-            src="https://yandex.ru/map-widget/v1/?ll=144.9631%2C-37.8136&z=14" 
-            frameborder="0"></iframe>
-    
-    <!-- Яндекс Спутниковые Карты -->
-    <iframe id="yandex_satellite" class="map-frame" 
-            src="https://yandex.ru/map-widget/v1/?l=sat&ll=144.9631%2C-37.8136&z=14" 
-            frameborder="0"></iframe>
-    
-    <!-- OpenStreetMap -->
-    <iframe id="osm" class="map-frame" 
-            src="https://www.openstreetmap.org/export/embed.html?bbox=144.946457%2C-37.823269%2C144.963421%2C-37.812643&layer=mapnik" 
-            frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+        // Определение различных слоев для Leaflet
+        var layers = {
+            osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19, // Максимальный уровень приближения
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' // Авторские права
+            }),
+            yandex: L.tileLayer('https://core-renderer-tiles.maps.yandex.net/tiles?l=map&v=22.08.27-1&x={x}&y={y}&z={z}&scale=1&lang=ru_RU', {
+                maxZoom: 19,
+                attribution: 'Map data &copy; 2023 Yandex' // Авторские права Яндекса
+            }),
+            google: L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 19,
+                attribution: 'Map data &copy; 2023 Google' // Авторские права Google
+            }),
+            esri: L.esri.basemapLayer('Imagery'), // Слой спутниковых изображений Esri
+            esriTopo: L.esri.basemapLayer('Topographic'), // Слой топографических карт Esri
+            esriHybrid: L.layerGroup([
+                L.esri.basemapLayer('Imagery'), // Спутниковый слой Esri
+                L.esri.basemapLayer('ImageryTransportation'), // Добавляем дороги, реки и другую инфраструктуру
+                L.esri.basemapLayer('ImageryLabels') // Подписи на карте (названия рек, дорог и т.п.)
+            ]), // Гибридный слой Esri (спутник + инфраструктура + подписи)
+            googleSat: L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                maxZoom: 19,
+                attribution: 'Map data &copy; 2023 Google'
+            }),
+            googleHybrid: L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+                maxZoom: 19,
+                attribution: 'Map data &copy; 2023 Google'
+            }),
+            yandexHybrid: L.tileLayer('https://core-renderer-tiles.maps.yandex.net/tiles?l=skl&v=22.08.27-1&x={x}&y={y}&z={z}&scale=1&lang=ru_RU', {
+                maxZoom: 19,
+                attribution: 'Map data &copy; 2023 Yandex'
+            }),
+            bingHybrid: L.tileLayer('https://t.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/{quadkey}?mkt=en-US&it=A,G,L&shading=hill&n=z', {
+                maxZoom: 19,
+                attribution: 'Map data &copy; 2023 Microsoft'
+            })
+        };
 
-    <!-- Esri Map -->
-    <iframe id="esri" class="map-frame" 
-            src="https://www.arcgis.com/apps/instant/basic/index.html?appid=10df2279f9684e4a9f6a7f08febac2a9&center=144.9631,-37.8136&level=14" 
-            frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-</div>
+        // Устанавливаем начальный слой OpenStreetMap для Leaflet
+        layers.osm.addTo(leafletMap);
 
-<script>
-    function switchMap(mapId) {
-        // Сначала скрываем все карты
-        document.querySelectorAll('.map-frame').forEach(map => {
-            map.classList.remove('active');
+        var yandexMap; // Переменная для хранения карты Яндекс
+        var bingMap; // Переменная для хранения карты Bing
+
+        // Функция для обновления координат и уровня приближения карты
+        function updateCoordinates(map) {
+            if (map) {
+                var center = map.getCenter(); // Получаем текущий центр карты
+                if (center && typeof center.lat === 'number' && typeof center.lng === 'number') {
+                    currentCenter = [center.lat, center.lng]; // Сохраняем новые координаты
+                    currentZoom = map.getZoom(); // Сохраняем новый уровень приближения
+                }
+            }
+        }
+
+        // Обработка изменения слоя карты при клике на кнопку
+        document.querySelectorAll('.map-button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var selectedLayer = button.getAttribute('data-layer'); // Получаем название слоя из атрибута кнопки
+
+                // Убираем класс active со всех кнопок
+                document.querySelectorAll('.map-button').forEach(function (btn) {
+                    btn.classList.remove('active');
+                });
+                // Добавляем класс active для нажатой кнопки
+                button.classList.add('active');
+
+                // Обновляем текущие координаты и уровень зума
+                if (leafletMap) {
+                    updateCoordinates(leafletMap);
+                } else if (yandexMap) {
+                    currentCenter = yandexMap.getCenter(); // Получаем координаты из Яндекс карты
+                    currentZoom = yandexMap.getZoom(); // Получаем уровень зума из Яндекс карты
+                } else if (bingMap) {
+                    var center = bingMap.getCenter(); // Получаем координаты из Bing карты
+                    currentCenter = [center.latitude, center.longitude];
+                    currentZoom = bingMap.getZoom();
+                }
+
+                // Скрываем все контейнеры карт перед переключением
+                document.getElementById('leafletMap').style.display = 'none';
+                document.getElementById('yandexMap').style.display = 'none';
+                document.getElementById('bingMap').style.display = 'none';
+
+                // Логика для переключения между картами на основе выбранного слоя
+                if (selectedLayer === 'yandexSat' || selectedLayer === 'yandex' || selectedLayer === 'yandexHybrid') {
+                    document.getElementById('yandexMap').style.display = 'block'; // Показываем контейнер Яндекс карты
+
+                    if (!yandexMap) {
+                        // Инициализация Яндекс карты (однократно)
+                        ymaps.ready(function () {
+                            yandexMap = new ymaps.Map("yandexMap", {
+                                center: currentCenter, // Устанавливаем центр карты
+                                zoom: currentZoom, // Устанавливаем уровень приближения
+                                type: selectedLayer === 'yandexSat' ? 'yandex#satellite' : (selectedLayer === 'yandexHybrid' ? 'yandex#hybrid' : 'yandex#map'),
+                                controls: ['typeSelector'] // Добавляем элементы управления
+                            });
+
+                            // Обновление координат при изменении границ Яндекс карты
+                            yandexMap.events.add('boundschange', function () {
+                                currentCenter = yandexMap.getCenter(); // Сохраняем текущий центр
+                                currentZoom = yandexMap.getZoom(); // Сохраняем текущий уровень приближения
+                            });
+                        });
+                    } else {
+                        // Обновляем существующую Яндекс карту с новыми параметрами
+                        yandexMap.setCenter(currentCenter, currentZoom);
+                        yandexMap.setType(selectedLayer === 'yandexSat' ? 'yandex#satellite' : (selectedLayer === 'yandexHybrid' ? 'yandex#hybrid' : 'yandex#map'));
+                    }
+                } else if (selectedLayer === 'bing' || selectedLayer === 'bingSat' || selectedLayer === 'bingHybrid') {
+                    document.getElementById('bingMap').style.display = 'block'; // Показываем контейнер Bing карты
+
+                    if (!bingMap) {
+                        // Инициализация Bing карты (однократно)
+                        bingMap = loadBingMapScenario();
+                        bingMap.setView({
+                            center: new Microsoft.Maps.Location(currentCenter[0], currentCenter[1]),
+                            zoom: currentZoom,
+                            mapTypeId: selectedLayer === 'bingSat' ? Microsoft.Maps.MapTypeId.aerial : (selectedLayer === 'bingHybrid' ? Microsoft.Maps.MapTypeId.hybrid : Microsoft.Maps.MapTypeId.road)
+                        });
+                    } else {
+                        // Обновляем существующую Bing карту с новыми параметрами
+                        bingMap.setView({
+                            center: new Microsoft.Maps.Location(currentCenter[0], currentCenter[1]),
+                            zoom: currentZoom,
+                            mapTypeId: selectedLayer === 'bingSat' ? Microsoft.Maps.MapTypeId.aerial : (selectedLayer === 'bingHybrid' ? Microsoft.Maps.MapTypeId.hybrid : Microsoft.Maps.MapTypeId.road)
+                        });
+                    }
+                } else {
+                    document.getElementById('leafletMap').style.display = 'block'; // Показываем контейнер Leaflet карты
+
+                    // Обновляем координаты и уровень зума на основе текущих данных из Яндекс или Bing карты
+                    if (yandexMap) {
+                        currentCenter = yandexMap.getCenter();
+                        currentZoom = yandexMap.getZoom();
+                    } else if (bingMap) {
+                        var center = bingMap.getCenter();
+                        currentCenter = [center.latitude, center.longitude];
+                        currentZoom = bingMap.getZoom();
+                    }
+
+                    // Переинициализация слоев Leaflet карты
+                    leafletMap.eachLayer(function (layer) {
+                        leafletMap.removeLayer(layer); // Удаляем существующие слои
+                    });
+                    leafletMap.setView(currentCenter, currentZoom); // Устанавливаем новое положение и уровень зума
+                    layers[selectedLayer].addTo(leafletMap); // Добавляем выбранный слой
+
+                    // Фиксируем проблему с отображением серых тайлов, перерисовывая карту после её отображения
+                    setTimeout(function () {
+                        leafletMap.invalidateSize(); // Перерисовка карты
+                    }, 200);
+
+                    // Обновляем координаты карты при движении
+                    leafletMap.on('moveend', function () {
+                        updateCoordinates(leafletMap); // Сохраняем новые координаты после перемещения карты
+                    });
+                    leafletMap.on('viewreset', function () {
+                        leafletMap.invalidateSize(); // Перерисовка карты при изменении вида
+                    });
+                }
+            });
         });
-        // Отображаем выбранную карту
-        document.getElementById(mapId).classList.add('active');
-    }
-</script>
-<a href="https://alex-kom.ru" class="side-button left" target="_blank">Вернутся</a>
+    </script>
 </body>
 </html>
