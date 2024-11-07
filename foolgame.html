@@ -3,15 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карточки Дурака</title>
+    <title>Игра "Дурак"</title>
     <style>
-        /* Основной стиль для карточек */
-        .card-container {
+        /* Стили для интерфейса */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .game-container {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hand, .table, .deck {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+
+        .hand, .table {
+            display: flex;
             gap: 10px;
-            justify-content: center;
-            margin: 20px;
+            flex-wrap: wrap;
         }
 
         .card {
@@ -19,51 +35,123 @@
             height: 90px;
             border: 1px solid #333;
             border-radius: 8px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-family: Arial, sans-serif;
             font-weight: bold;
             font-size: 1.2em;
-            color: #333;
-            position: relative;
         }
 
-        .card .suit {
-            font-size: 0.8em;
-        }
-
-        .card.hearts, .card.diamonds {
-            color: red;
-        }
-
-        .card.clubs, .card.spades {
-            color: black;
-        }
-
-        /* Стили для мастей */
-        .hearts .suit::after { content: "♥"; }
-        .diamonds .suit::after { content: "♦"; }
-        .clubs .suit::after { content: "♣"; }
-        .spades .suit::after { content: "♠"; }
+        .card.red { color: red; }
+        .card.black { color: black; }
     </style>
 </head>
 <body>
 
-<div class="card-container">
-    <!-- Пример карт -->
-    <div class="card hearts"><div class="rank">6</div><div class="suit"></div></div>
-    <div class="card diamonds"><div class="rank">7</div><div class="suit"></div></div>
-    <div class="card clubs"><div class="rank">8</div><div class="suit"></div></div>
-    <div class="card spades"><div class="rank">9</div><div class="suit"></div></div>
-    <div class="card hearts"><div class="rank">10</div><div class="suit"></div></div>
-    <div class="card diamonds"><div class="rank">В</div><div class="suit"></div></div>
-    <div class="card clubs"><div class="rank">Д</div><div class="suit"></div></div>
-    <div class="card spades"><div class="rank">К</div><div class="suit"></div></div>
-    <div class="card hearts"><div class="rank">Т</div><div class="suit"></div></div>
+<div class="game-container">
+    <h1>Игра "Дурак"</h1>
+    <div id="status">Начинаем игру...</div>
+    <div class="deck" id="deck">Карт в колоде: 36</div>
+    <div class="table" id="table">Поле</div>
+    <div class="hand" id="player-hand">Ваша рука</div>
+    <div class="hand" id="computer-hand">Карты компьютера (скрыты)</div>
+    <button onclick="startGame()">Начать игру</button>
 </div>
+
+<script>
+    // Базовые настройки
+    const suits = ["♥", "♦", "♣", "♠"];
+    const values = ["6", "7", "8", "9", "10", "В", "Д", "К", "Т"];
+    let deck = [];
+    let playerHand = [];
+    let computerHand = [];
+    let tableCards = [];
+    let trumpSuit = "";
+
+    function createDeck() {
+        deck = [];
+        suits.forEach(suit => {
+            values.forEach(value => {
+                deck.push({ value, suit, color: (suit === "♥" || suit === "♦") ? "red" : "black" });
+            });
+        });
+        deck = deck.sort(() => Math.random() - 0.5); // Перемешивание
+        trumpSuit = deck[0].suit; // Козырь
+        document.getElementById("status").innerText = `Козырь: ${trumpSuit}`;
+    }
+
+    function dealCards() {
+        playerHand = deck.splice(0, 6);
+        computerHand = deck.splice(0, 6);
+        updateDeckCount();
+        renderHands();
+    }
+
+    function updateDeckCount() {
+        document.getElementById("deck").innerText = `Карт в колоде: ${deck.length}`;
+    }
+
+    function renderHands() {
+        const playerHandEl = document.getElementById("player-hand");
+        playerHandEl.innerHTML = '';
+        playerHand.forEach((card, index) => {
+            const cardEl = document.createElement("div");
+            cardEl.className = `card ${card.color}`;
+            cardEl.innerText = `${card.value}${card.suit}`;
+            cardEl.onclick = () => playCard(index);
+            playerHandEl.appendChild(cardEl);
+        });
+
+        const computerHandEl = document.getElementById("computer-hand");
+        computerHandEl.innerHTML = '';
+        computerHand.forEach(() => {
+            const cardEl = document.createElement("div");
+            cardEl.className = "card back";
+            cardEl.innerText = "❓";
+            computerHandEl.appendChild(cardEl);
+        });
+    }
+
+    function playCard(index) {
+        const card = playerHand[index];
+        tableCards.push(card);
+        playerHand.splice(index, 1);
+        renderHands();
+        renderTable();
+        setTimeout(() => computerMove(card), 1000);
+    }
+
+    function renderTable() {
+        const tableEl = document.getElementById("table");
+        tableEl.innerHTML = '';
+        tableCards.forEach(card => {
+            const cardEl = document.createElement("div");
+            cardEl.className = `card ${card.color}`;
+            cardEl.innerText = `${card.value}${card.suit}`;
+            tableEl.appendChild(cardEl);
+        });
+    }
+
+    function computerMove(playerCard) {
+        const defendingCard = computerHand.find(card => card.suit === playerCard.suit && values.indexOf(card.value) > values.indexOf(playerCard.value));
+        if (defendingCard) {
+            tableCards.push(defendingCard);
+            computerHand = computerHand.filter(card => card !== defendingCard);
+            document.getElementById("status").innerText = "Компьютер отбился!";
+        } else {
+            computerHand.push(...tableCards);
+            document.getElementById("status").innerText = "Компьютер забрал карты!";
+        }
+        tableCards = [];
+        renderTable();
+        renderHands();
+    }
+
+    function startGame() {
+        createDeck();
+        dealCards();
+    }
+</script>
 
 </body>
 </html>
