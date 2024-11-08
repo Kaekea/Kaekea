@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Салют на Canvas с большим количеством частиц и крупным текстом</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { height: 100%; overflow: hidden; }
+        #controls {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-size: 1.2em; /* Увеличение размера шрифта */
+            color: white;
+        }
+        #myCanvas { background: black; display: block; width: 100vw; height: 100vh; }
+        label {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <label>Сила: <input type="range" id="force" min="1" max="20" value="10"></label>
+        <label>Гравитация: <input type="range" id="gravity" min="0" max="2" step="0.1" value="0.5"></label>
+        <label>Количество частиц: <input type="range" id="particleCount" min="50" max="500" value="200"></label>
+        <label>Размер частиц: <input type="range" id="particleSize" min="1" max="10" value="3"></label>
+    </div>
+    <canvas id="myCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+        const particles = [];
+        const forceSlider = document.getElementById("force");
+        const gravitySlider = document.getElementById("gravity");
+        const particleCountSlider = document.getElementById("particleCount");
+        const particleSizeSlider = document.getElementById("particleSize");
+
+        // Установка размеров canvas во весь экран
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function randomColor() {
+            return `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
+        }
+
+        class Particle {
+            constructor(x, y, force, gravity, size) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * force;
+                this.vy = Math.random() * -force;
+                this.gravity = gravity;
+                this.size = size;
+                this.alpha = 1;
+                this.color = randomColor();
+            }
+
+            update() {
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.02;
+            }
+
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function createParticles(x, y, force, gravity, particleCount, particleSize) {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(x, y, force, gravity, particleSize));
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.update();
+                p.draw();
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Центрирование фейерверка при клике
+        canvas.addEventListener("click", (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            const force = parseFloat(forceSlider.value);
+            const gravity = parseFloat(gravitySlider.value);
+            const particleCount = parseInt(particleCountSlider.value);
+            const particleSize = parseFloat(particleSizeSlider.value);
+            createParticles(x, y, force, gravity, particleCount, particleSize);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
