@@ -1,317 +1,4 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переливающиеся и морфирующие ссылки с волной и увеличением</title>
-    <style>
-        /* Контейнер для центрирования текста */
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh; /* Минимальная высота экрана */
-            text-align: center;
-            overflow: visible; /* Убедимся, что ничего не обрезается */
-        }
-
-        /* Стиль для ссылок */
-        .morphing-link {
-            font-size: 5em; /* Увеличиваем размер текста */
-            color: #3498db;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-            animation: colorShift 10s infinite; /* Замедлили цветовое переливание */
-            white-space: nowrap; /* Предотвращает перенос текста */
-        }
-
-        /* Эффект волны и увеличения для каждой буквы */
-        .wave span {
-            display: inline-block;
-            animation: wave 2s infinite ease-in-out; /* Замедлили анимацию волны */
-        }
-
-        /* Ключевые кадры для анимации волны с увеличением */
-        @keyframes wave {
-            0%, 100% {
-                transform: translateY(0) scale(1); /* Начальная позиция и размер */
-            }
-            50% {
-                transform: translateY(-20px) scale(1.2); /* Подъем и увеличение */
-            }
-        }
-
-        /* Анимация для переливания цвета */
-        @keyframes colorShift {
-            0% {
-                color: #3498db;
-            }
-            25% {
-                color: #9b59b6;
-            }
-            50% {
-                color: #e74c3c;
-            }
-            75% {
-                color: #f1c40f;
-            }
-            100% {
-                color: #3498db;
-            }
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <a href="audiotools.html" class="morphing-link wave">
-        <!-- Каждая буква обернута в <span> для волнового эффекта -->
-        <span style="animation-delay: 0s">A</span>
-        <span style="animation-delay: 0.2s">u</span>
-        <span style="animation-delay: 0.4s">d</span>
-        <span style="animation-delay: 0.6s">i</span>
-        <span style="animation-delay: 0.8s">o</span>
-        <span style="animation-delay: 1s">T</span>
-        <span style="animation-delay: 1.2s">o</span>
-        <span style="animation-delay: 1.4s">o</span>
-        <span style="animation-delay: 1.6s">l</span>
-        <span style="animation-delay: 1.8s">s</span>
-    </a><br>
-    <a href="gameXO.html" class="morphing-link wave">
-        <span style="animation-delay: 0s">g</span>
-        <span style="animation-delay: 0.2s">a</span>
-        <span style="animation-delay: 0.4s">m</span>
-        <span style="animation-delay: 0.6s">e</span>
-        <span style="animation-delay: 0.8s">X</span>
-        <span style="animation-delay: 1s">O</span>
-       <a href="games.html" class="morphing-link wave"> 
-        <span style="animation-delay: 0s">g</span>
-        <span style="animation-delay: 0.2s">a</span>
-        <span style="animation-delay: 0.4s">m</span>
-        <span style="animation-delay: 0.6s">e</span>
-        <span style="animation-delay: 0.8s">s</span>
-       <a href="maps.html" class="morphing-link wave"> 
-        <span style="animation-delay: 0s">m</span>
-        <span style="animation-delay: 0.2s">a</span>
-        <span style="animation-delay: 0.4s">p</span>
-        <span style="animation-delay: 0.6s">s</span>
-       <a href="all.html" class="morphing-link wave"> 
-        <span style="animation-delay: 0s">a</span>
-        <span style="animation-delay: 0.2s">l</span>
-        <span style="animation-delay: 0.4s">l</span>
-    </a><br>
-</div>
-
-    <!-- CSS для кнопок по сторонам экрана -->
-<style>
-    /* Основной стиль для кнопок */
-    .side-button {
-        position: fixed;
-        width: 60px;
-        height: 60px;
-        background-color: #3498db;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: bold;
-        text-align: center;
-        border-radius: 50%;
-        text-decoration: none;
-        animation: float 3s infinite ease-in-out;
-        z-index: 1000; /* Поверх основного содержимого страницы */
-    }
-
-    /* Левая кнопка */
-    .side-button.left {
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* Правая кнопка */
-    .side-button.right {
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* Анимация для движения вверх-вниз */
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(-50%) translateY(0);
-        }
-        50% {
-            transform: translateY(-50%) translateY(-20px);
-        }
-    }    
-</style>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Салют на Canvas для мобильных устройств</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; overflow: hidden; }
-        #controls {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            font-size: 1.5em;
-            color: white;
-            display: none; /* скрываем контролы по умолчанию */
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-        }
-        #toggleButton {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            color: white;
-            background: rgba(0, 0, 0, 0.7);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #myCanvas { background: black; display: block; width: 100vw; height: 100vh; }
-        
-        /* Адаптация для мобильных устройств */
-        @media (max-width: 768px) {
-            #controls { font-size: 1.2em; }
-            label, input { font-size: 1em; }
-        }
-    </style>
-</head>
-<body>
-    <!-- Кнопка для отображения/скрытия панели управления -->
-    <button id="toggleButton">Настройки</button>
-
-    <!-- Панель управления для настройки параметров салюта -->
-    <div id="controls">
-        <label>Сила: <input type="range" id="force" min="1" max="20" value="10"></label>
-        <label>Гравитация: <input type="range" id="gravity" min="0" max="2" step="0.1" value="0.5"></label>
-        <label>Количество частиц: <input type="range" id="particleCount" min="50" max="500" value="200"></label>
-        <label>Размер частиц: <input type="range" id="particleSize" min="1" max="10" value="3"></label>
-    </div>
-    
-    <!-- Canvas для отображения салюта -->
-    <canvas id="myCanvas"></canvas>
-
-    <script>
-        const canvas = document.getElementById("myCanvas");
-        const ctx = canvas.getContext("2d");
-        const particles = [];
-        const forceSlider = document.getElementById("force");
-        const gravitySlider = document.getElementById("gravity");
-        const particleCountSlider = document.getElementById("particleCount");
-        const particleSizeSlider = document.getElementById("particleSize");
-        const toggleButton = document.getElementById("toggleButton");
-        const controls = document.getElementById("controls");
-
-        // Установка размеров canvas во весь экран
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function randomColor() {
-            return `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
-        }
-
-        class Particle {
-            constructor(x, y, force, gravity, size) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * force;
-                this.vy = Math.random() * -force;
-                this.gravity = gravity;
-                this.size = size;
-                this.alpha = 1;
-                this.color = randomColor();
-            }
-
-            update() {
-                this.vy += this.gravity;
-                this.x += this.vx;
-                this.y += this.vy;
-                this.alpha -= 0.02;
-            }
-
-            draw() {
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-        }
-
-        function createParticles(x, y, force, gravity, particleCount, particleSize) {
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle(x, y, force, gravity, particleSize));
-            }
-        }
-
-        function animate() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                p.update();
-                p.draw();
-
-                if (p.alpha <= 0) {
-                    particles.splice(i, 1);
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-
-        // Показать/скрыть панель управления при нажатии кнопки
-        toggleButton.addEventListener("click", () => {
-            controls.style.display = controls.style.display === "none" ? "flex" : "none";
-        });
-
-        // Центрирование фейерверка при клике
-        canvas.addEventListener("click", (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
-            const force = parseFloat(forceSlider.value);
-            const gravity = parseFloat(gravitySlider.value);
-            const particleCount = parseInt(particleCountSlider.value);
-            const particleSize = parseFloat(particleSizeSlider.value);
-            createParticles(x, y, force, gravity, particleCount, particleSize);
-        });
-
-        animate();
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -340,7 +27,7 @@
             align-items: center;
             gap: 10px;
             background: rgba(0, 0, 0, 0.7);
-            padding: 2vh 2vw; /* адаптивные отступы */
+            padding: 2vh 2vw;
             border-radius: 5px;
             font-size: 2.5vw; /* адаптивный размер шрифта */
         }
@@ -362,17 +49,6 @@
         
         label, input {
             font-size: inherit; /* наследование адаптивного шрифта */
-        }
-
-        /* Настройки для мобильных устройств */
-        @media (max-width: 768px) {
-            #controls {
-                font-size: 3vw;
-            }
-            #toggleButton {
-                font-size: 4vw;
-                padding: 2vw;
-            }
         }
     </style>
 </head>
@@ -409,6 +85,30 @@
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
+
+        // Функция для подстройки панели управления под размер экрана
+        function scaleControls() {
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            // Применяем масштабирование панели управления на основе размеров экрана
+            if (screenWidth < 600) { // для мобильных устройств
+                controls.style.width = "90%";
+                controls.style.fontSize = "4vw"; // динамический размер шрифта
+            } else if (screenWidth < 1200) { // для планшетов
+                controls.style.width = "70%";
+                controls.style.fontSize = "2.5vw";
+            } else { // для десктопов
+                controls.style.width = "50%";
+                controls.style.fontSize = "1.5vw";
+            }
+        }
+
+        // Вызов функции при загрузке страницы
+        window.addEventListener("load", () => {
+            resizeCanvas();
+            scaleControls();
+        });
 
         function randomColor() {
             return `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
@@ -483,8 +183,5 @@
 
         animate();
     </script>
-</body>
-</html>
-
 </body>
 </html>
