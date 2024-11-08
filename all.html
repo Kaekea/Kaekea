@@ -367,6 +367,180 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Адаптивный Салют на Canvas</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { height: 100%; overflow: hidden; }
+        
+        #myCanvas {
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            display: block;
+        }
+        
+        #controls {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            color: white;
+            display: none; /* скрыто по умолчанию */
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2vh 2vw; /* адаптивные отступы */
+            border-radius: 5px;
+            font-size: 2.5vw; /* адаптивный размер шрифта */
+        }
+        
+        #toggleButton {
+            position: fixed;
+            bottom: 3vh;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            padding: 1vh 2vw;
+            font-size: 3vw;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        label, input {
+            font-size: inherit; /* наследование адаптивного шрифта */
+        }
+
+        /* Настройки для мобильных устройств */
+        @media (max-width: 768px) {
+            #controls {
+                font-size: 3vw;
+            }
+            #toggleButton {
+                font-size: 4vw;
+                padding: 2vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка для отображения/скрытия панели управления -->
+    <button id="toggleButton">Настройки</button>
+
+    <!-- Панель управления для настройки параметров салюта -->
+    <div id="controls">
+        <label>Сила: <input type="range" id="force" min="1" max="20" value="10"></label>
+        <label>Гравитация: <input type="range" id="gravity" min="0" max="2" step="0.1" value="0.5"></label>
+        <label>Количество частиц: <input type="range" id="particleCount" min="50" max="500" value="200"></label>
+        <label>Размер частиц: <input type="range" id="particleSize" min="1" max="10" value="3"></label>
+    </div>
+    
+    <!-- Canvas для отображения салюта -->
+    <canvas id="myCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+        const particles = [];
+        const forceSlider = document.getElementById("force");
+        const gravitySlider = document.getElementById("gravity");
+        const particleCountSlider = document.getElementById("particleCount");
+        const particleSizeSlider = document.getElementById("particleSize");
+        const toggleButton = document.getElementById("toggleButton");
+        const controls = document.getElementById("controls");
+
+        // Установка размеров canvas во весь экран
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function randomColor() {
+            return `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
+        }
+
+        class Particle {
+            constructor(x, y, force, gravity, size) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * force;
+                this.vy = Math.random() * -force;
+                this.gravity = gravity;
+                this.size = size;
+                this.alpha = 1;
+                this.color = randomColor();
+            }
+
+            update() {
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.02;
+            }
+
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function createParticles(x, y, force, gravity, particleCount, particleSize) {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(x, y, force, gravity, particleSize));
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.update();
+                p.draw();
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Показать/скрыть панель управления при нажатии кнопки
+        toggleButton.addEventListener("click", () => {
+            controls.style.display = controls.style.display === "none" ? "flex" : "none";
+        });
+
+        // Центрирование фейерверка при клике
+        canvas.addEventListener("click", (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            const force = parseFloat(forceSlider.value);
+            const gravity = parseFloat(gravitySlider.value);
+            const particleCount = parseInt(particleCountSlider.value);
+            const particleSize = parseFloat(particleSizeSlider.value);
+            createParticles(x, y, force, gravity, particleCount, particleSize);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
 
 </body>
 </html>
