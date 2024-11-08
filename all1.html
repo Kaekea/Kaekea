@@ -1,1 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переливающиеся и морфирующие ссылки с волной и увеличением</title>
+    <style>
+        /* Контейнер для центрирования текста */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Минимальная высота экрана */
+            text-align: center;
+            overflow: visible; /* Убедимся, что ничего не обрезается */
+        }
 
+        /* Стиль для ссылок */
+        .morphing-link {
+            font-size: 5em; /* Увеличиваем размер текста */
+            color: #3498db;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            animation: colorShift 10s infinite; /* Замедлили цветовое переливание */
+            white-space: nowrap; /* Предотвращает перенос текста */
+        }
+
+        /* Эффект волны и увеличения для каждой буквы */
+        .wave span {
+            display: inline-block;
+            animation: wave 2s infinite ease-in-out; /* Замедлили анимацию волны */
+        }
+
+        /* Ключевые кадры для анимации волны с увеличением */
+        @keyframes wave {
+            0%, 100% {
+                transform: translateY(0) scale(1); /* Начальная позиция и размер */
+            }
+            50% {
+                transform: translateY(-20px) scale(1.2); /* Подъем и увеличение */
+            }
+        }
+
+        /* Анимация для переливания цвета */
+        @keyframes colorShift {
+            0% {
+                color: #3498db;
+            }
+            25% {
+                color: #9b59b6;
+            }
+            50% {
+                color: #e74c3c;
+            }
+            75% {
+                color: #f1c40f;
+            }
+            100% {
+                color: #3498db;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="poz.html" class="morphing-link wave">
+        <!-- Каждая буква обернута в <span> для волнового эффекта -->
+        <span style="animation-delay: 0s">p</span>
+        <span style="animation-delay: 0.2s">o</span>
+        <span style="animation-delay: 0.4s">z</span>
+    </a><br>
+    <a href="foolgame.html" class="morphing-link wave">
+        <span style="animation-delay: 0s">f</span>
+        <span style="animation-delay: 0.2s">o</span>
+        <span style="animation-delay: 0.4s">o</span>
+        <span style="animation-delay: 0.6s">l</span>
+        <span style="animation-delay: 0.8s">g</span>
+        <span style="animation-delay: 1s">a</span>
+        <span style="animation-delay: 1.2s">m</span>
+        <span style="animation-delay: 1.4s">e</span>
+       <a href="music.html" class="morphing-link wave"> 
+        <span style="animation-delay: 0s">m</span>
+        <span style="animation-delay: 0.2s">u</span>
+        <span style="animation-delay: 0.4s">s</span>
+        <span style="animation-delay: 0.6s">i</span>
+        <span style="animation-delay: 0.8s">c</span>
+       <a href="razpozplay.html" class="morphing-link wave"> 
+        <span style="animation-delay: 0s">r</span>
+        <span style="animation-delay: 0.2s">a</span>
+        <span style="animation-delay: 0.4s">z</span>
+        <span style="animation-delay: 0.6s">p</span>
+        <span style="animation-delay: 0.8s">o</span>
+        <span style="animation-delay: 1s">z</span>
+        <span style="animation-delay: 1.2s">p</span>
+        <span style="animation-delay: 1.4s">l</span>
+        <span style="animation-delay: 1.6s">a</span>
+        <span style="animation-delay: 1.8s">y</span>
+       <a href="all1.html" class="morphing-link wave"> 
+        <span style="animation-delay: 0s">a</span>
+        <span style="animation-delay: 0.2s">l</span>
+        <span style="animation-delay: 0.4s">l</span>
+    </a><br>
+</div>
+
+    <!-- CSS для кнопок по сторонам экрана -->
+<style>
+    /* Основной стиль для кнопок */
+    .side-button {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        background-color: #3498db;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 50%;
+        text-decoration: none;
+        animation: float 3s infinite ease-in-out;
+        z-index: 1000; /* Поверх основного содержимого страницы */
+    }
+
+    /* Левая кнопка */
+    .side-button.left {
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Правая кнопка */
+    .side-button.right {
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Анимация для движения вверх-вниз */
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(-50%) translateY(0);
+        }
+        50% {
+            transform: translateY(-50%) translateY(-20px);
+        }
+    }    
+</style>
+<a href="https://alex-kom/all.ru" class="side-button left" target="_blank">Вернутся</a>
+</body>
+</html>
