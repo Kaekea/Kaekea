@@ -104,67 +104,57 @@
         <span style="animation-delay: 0.4s">l</span>
     </a><br>
 </div>
-
-    <!-- CSS для кнопок по сторонам экрана -->
-<style>
-    /* Основной стиль для кнопок */
-    .side-button {
-        position: fixed;
-        width: 60px;
-        height: 60px;
-        background-color: #3498db;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: bold;
-        text-align: center;
-        border-radius: 50%;
-        text-decoration: none;
-        animation: float 3s infinite ease-in-out;
-        z-index: 1000; /* Поверх основного содержимого страницы */
-    }
-
-    /* Левая кнопка */
-    .side-button.left {
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* Правая кнопка */
-    .side-button.right {
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* Анимация для движения вверх-вниз */
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(-50%) translateY(0);
-        }
-        50% {
-            transform: translateY(-50%) translateY(-20px);
-        }
-    }    
-</style>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вернуться на all1</title>
+    <title>Перейти на all</title>
+    <style>
+        /* Стили для кнопки */
+        .cool-button {
+            position: fixed; /* Закрепляем кнопку в верхней части */
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%); /* Центрируем кнопку по горизонтали */
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(45deg, #ff0077, #7700ff);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            outline: none;
+            z-index: 1000; /* Кнопка поверх других элементов */
+        }
+
+        /* Эффект при наведении на кнопку */
+        .cool-button:hover {
+            background: linear-gradient(45deg, #7700ff, #ff0077);
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Анимация при нажатии */
+        .cool-button:active {
+            transform: scale(0.98);
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
 <body>
-    <!-- Кнопка "Вернуться" -->
-    <button onclick="goToAll1()">Вернуться</button>
+    <!-- Кнопка "Перейти на all" -->
+    <button class="cool-button" onclick="goToAll()">Перейти на all</button>
 
     <!-- JavaScript для перенаправления -->
     <script>
-        function goToAll1() {
-            window.location.href = "https://alex-kom.ru/all1";
+        function goToAll() {
+            window.location.href = "https://alex-kom.ru/all";
         }
     </script>
 </body>
