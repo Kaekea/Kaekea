@@ -5,41 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Переливающиеся и морфирующие ссылки с волной и увеличением</title>
     <style>
-        /* Контейнер для центрирования текста */
+        /* Основной контейнер для центрирования текста */
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh; /* Минимальная высота экрана */
+            min-height: 100vh;
             text-align: center;
-            overflow: visible; /* Убедимся, что ничего не обрезается */
+            overflow: visible;
         }
 
         /* Стиль для ссылок */
         .morphing-link {
-            font-size: 5em; /* Увеличиваем размер текста */
+            font-size: 5em;
             color: #3498db;
             font-weight: bold;
             text-decoration: none;
             display: inline-block;
-            animation: colorShift 10s infinite; /* Замедлили цветовое переливание */
-            white-space: nowrap; /* Предотвращает перенос текста */
+            animation: colorShift 10s infinite;
+            white-space: nowrap;
         }
 
         /* Эффект волны и увеличения для каждой буквы */
         .wave span {
             display: inline-block;
-            animation: wave 2s infinite ease-in-out; /* Замедлили анимацию волны */
+            animation: wave 2s infinite ease-in-out;
         }
 
         /* Ключевые кадры для анимации волны с увеличением */
         @keyframes wave {
             0%, 100% {
-                transform: translateY(0) scale(1); /* Начальная позиция и размер */
+                transform: translateY(0) scale(1);
             }
             50% {
-                transform: translateY(-20px) scale(1.2); /* Подъем и увеличение */
+                transform: translateY(-20px) scale(1.2);
             }
         }
 
@@ -61,108 +61,88 @@
                 color: #3498db;
             }
         }
-    </style>
-</head>
-<body>
 
-<div class="container">
-    <a href="poz.html" class="morphing-link wave">
-        <!-- Каждая буква обернута в <span> для волнового эффекта -->
-        <span style="animation-delay: 0s">p</span>
-        <span style="animation-delay: 0.2s">o</span>
-        <span style="animation-delay: 0.4s">z</span>
-    </a><br>
-    <a href="foolgame.html" class="morphing-link wave">
-        <span style="animation-delay: 0s">f</span>
-        <span style="animation-delay: 0.2s">o</span>
-        <span style="animation-delay: 0.4s">o</span>
-        <span style="animation-delay: 0.6s">l</span>
-        <span style="animation-delay: 0.8s">g</span>
-        <span style="animation-delay: 1s">a</span>
-        <span style="animation-delay: 1.2s">m</span>
-        <span style="animation-delay: 1.4s">e</span>
-       <a href="music.html" class="morphing-link wave"> 
-        <span style="animation-delay: 0s">m</span>
-        <span style="animation-delay: 0.2s">u</span>
-        <span style="animation-delay: 0.4s">s</span>
-        <span style="animation-delay: 0.6s">i</span>
-        <span style="animation-delay: 0.8s">c</span>
-       <a href="razpozplay.html" class="morphing-link wave"> 
-        <span style="animation-delay: 0s">r</span>
-        <span style="animation-delay: 0.2s">a</span>
-        <span style="animation-delay: 0.4s">z</span>
-        <span style="animation-delay: 0.6s">p</span>
-        <span style="animation-delay: 0.8s">o</span>
-        <span style="animation-delay: 1s">z</span>
-        <span style="animation-delay: 1.2s">p</span>
-        <span style="animation-delay: 1.4s">l</span>
-        <span style="animation-delay: 1.6s">a</span>
-        <span style="animation-delay: 1.8s">y</span>
-       <a href="all1.html" class="morphing-link wave"> 
-        <span style="animation-delay: 0s">a</span>
-        <span style="animation-delay: 0.2s">l</span>
-        <span style="animation-delay: 0.4s">l</span>
-    </a><br>
-</div>
-
-    <!-- CSS для кнопок по сторонам экрана -->
-<style>
-    /* Основной стиль для кнопок */
-    .side-button {
-        position: fixed;
-        width: 60px;
-        height: 60px;
-        background-color: #3498db;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: bold;
-        text-align: center;
-        border-radius: 50%;
-        text-decoration: none;
-        animation: float 3s infinite ease-in-out;
-        z-index: 1000; /* Поверх основного содержимого страницы */
-    }
-
-    /* Левая кнопка */
-    .side-button.left {
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* Правая кнопка */
-    .side-button.right {
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* Анимация для движения вверх-вниз */
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(-50%) translateY(0);
+        /* CSS для кнопок по сторонам экрана */
+        .side-button {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            background-color: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 50%;
+            text-decoration: none;
+            animation: float 3s infinite ease-in-out;
+            z-index: 1000;
         }
-        50% {
-            transform: translateY(-50%) translateY(-20px);
+
+        .side-button.left {
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
         }
-    }    
-</style>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Перейти на alex-kom.ru</title>
-    <style>
-        /* Стили для кнопки */
+
+        .side-button.right {
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Анимация для движения кнопок вверх-вниз */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(-50%) translateY(0);
+            }
+            50% {
+                transform: translateY(-50%) translateY(-20px);
+            }
+        }
+
+        /* Медиазапросы для адаптивности */
+        @media (max-width: 1024px) {
+            .morphing-link {
+                font-size: 4em;
+            }
+            .side-button {
+                width: 50px;
+                height: 50px;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .morphing-link {
+                font-size: 3em;
+            }
+            .side-button {
+                width: 40px;
+                height: 40px;
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .morphing-link {
+                font-size: 2em;
+            }
+            .side-button {
+                width: 35px;
+                height: 35px;
+                font-size: 8px;
+            }
+        }
+
+        /* Стили для кнопки "Перейти на alex-kom.ru" */
         .cool-button {
-            position: fixed; /* Закрепляем кнопку в верхней части */
+            position: fixed;
             top: 10px;
             left: 50%;
-            transform: translateX(-50%); /* Центрируем кнопку по горизонтали */
+            transform: translateX(-50%);
             padding: 15px 30px;
             font-size: 18px;
             font-weight: bold;
@@ -176,17 +156,17 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             outline: none;
-            z-index: 1000; /* Кнопка поверх других элементов */
+            z-index: 1000;
         }
 
-        /* Эффект при наведении на кнопку */
+        /* Эффект при наведении на кнопку "Перейти на alex-kom.ru" */
         .cool-button:hover {
             background: linear-gradient(45deg, #7700ff, #ff0077);
             box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
             transform: scale(1.05);
         }
 
-        /* Анимация при нажатии */
+        /* Анимация при нажатии на кнопку "Перейти на alex-kom.ru" */
         .cool-button:active {
             transform: scale(0.98);
             box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.3);
@@ -194,353 +174,60 @@
     </style>
 </head>
 <body>
-    <!-- Кнопка "Перейти на alex-kom.ru" -->
-    <button class="cool-button" onclick="goToHome()">Вернутся</button>
 
-    <!-- JavaScript для перенаправления -->
-    <script>
-        function goToHome() {
-            window.location.href = "https://alex-kom.ru";
-        }
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Салют на Canvas для мобильных устройств</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; overflow: hidden; }
-        #controls {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            font-size: 1.5em;
-            color: white;
-            display: none; /* скрываем контролы по умолчанию */
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-        }
-        #toggleButton {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            color: white;
-            background: rgba(0, 0, 0, 0.7);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #myCanvas { background: black; display: block; width: 100vw; height: 100vh; }
-        
-        /* Адаптация для мобильных устройств */
-        @media (max-width: 768px) {
-            #controls { font-size: 1.2em; }
-            label, input { font-size: 1em; }
-        }
-    </style>
-</head>
-<body>
-    <!-- Кнопка для отображения/скрытия панели управления -->
-    <button id="toggleButton">Настройки</button>
+<div class="container">
+    <a href="audiotools.html" class="morphing-link wave">
+        <span style="animation-delay: 0s">A</span>
+        <span style="animation-delay: 0.2s">u</span>
+        <span style="animation-delay: 0.4s">d</span>
+        <span style="animation-delay: 0.6s">i</span>
+        <span style="animation-delay: 0.8s">o</span>
+        <span style="animation-delay: 1s">T</span>
+        <span style="animation-delay: 1.2s">o</span>
+        <span style="animation-delay: 1.4s">o</span>
+        <span style="animation-delay: 1.6s">l</span>
+        <span style="animation-delay: 1.8s">s</span>
+    </a><br>
+    <a href="gameXO.html" class="morphing-link wave">
+        <span style="animation-delay: 0s">g</span>
+        <span style="animation-delay: 0.2s">a</span>
+        <span style="animation-delay: 0.4s">m</span>
+        <span style="animation-delay: 0.6s">e</span>
+        <span style="animation-delay: 0.8s">X</span>
+        <span style="animation-delay: 1s">O</span>
+    </a><br>
+    <a href="games.html" class="morphing-link wave">
+        <span style="animation-delay: 0s">g</span>
+        <span style="animation-delay: 0.2s">a</span>
+        <span style="animation-delay: 0.4s">m</span>
+        <span style="animation-delay: 0.6s">e</span>
+        <span style="animation-delay: 0.8s">s</span>
+    </a><br>
+    <a href="maps.html" class="morphing-link wave">
+        <span style="animation-delay: 0s">m</span>
+        <span style="animation-delay: 0.2s">a</span>
+        <span style="animation-delay: 0.4s">p</span>
+        <span style="animation-delay: 0.6s">s</span>
+    </a><br>
+    <a href="all.html" class="morphing-link wave">
+        <span style="animation-delay: 0s">a</span>
+        <span style="animation-delay: 0.2s">l</span>
+        <span style="animation-delay: 0.4s">l</span>
+    </a>
+</div>
 
-    <!-- Панель управления для настройки параметров салюта -->
-    <div id="controls">
-        <label>Сила: <input type="range" id="force" min="1" max="20" value="10"></label>
-        <label>Гравитация: <input type="range" id="gravity" min="0" max="2" step="0.1" value="0.5"></label>
-        <label>Количество частиц: <input type="range" id="particleCount" min="50" max="500" value="200"></label>
-        <label>Размер частиц: <input type="range" id="particleSize" min="1" max="10" value="3"></label>
-    </div>
-    
-    <!-- Canvas для отображения салюта -->
-    <canvas id="myCanvas"></canvas>
+<a href="#left" class="side-button left">&larr;</a>
+<a href="#right" class="side-button right">&rarr;</a>
 
-    <script>
-        const canvas = document.getElementById("myCanvas");
-        const ctx = canvas.getContext("2d");
-        const particles = [];
-        const forceSlider = document.getElementById("force");
-        const gravitySlider = document.getElementById("gravity");
-        const particleCountSlider = document.getElementById("particleCount");
-        const particleSizeSlider = document.getElementById("particleSize");
-        const toggleButton = document.getElementById("toggleButton");
-        const controls = document.getElementById("controls");
+<!-- Кнопка "Перейти на alex-kom.ru" -->
+<button class="cool-button" onclick="goToHome()">Вернуться</button>
 
-        // Установка размеров canvas во весь экран
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function randomColor() {
-            return `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
-        }
-
-        class Particle {
-            constructor(x, y, force, gravity, size) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * force;
-                this.vy = Math.random() * -force;
-                this.gravity = gravity;
-                this.size = size;
-                this.alpha = 1;
-                this.color = randomColor();
-            }
-
-            update() {
-                this.vy += this.gravity;
-                this.x += this.vx;
-                this.y += this.vy;
-                this.alpha -= 0.02;
-            }
-
-            draw() {
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-        }
-
-        function createParticles(x, y, force, gravity, particleCount, particleSize) {
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle(x, y, force, gravity, particleSize));
-            }
-        }
-
-        function animate() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                p.update();
-                p.draw();
-
-                if (p.alpha <= 0) {
-                    particles.splice(i, 1);
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-
-        // Показать/скрыть панель управления при нажатии кнопки
-        toggleButton.addEventListener("click", () => {
-            controls.style.display = controls.style.display === "none" ? "flex" : "none";
-        });
-
-        // Центрирование фейерверка при клике
-        canvas.addEventListener("click", (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
-            const force = parseFloat(forceSlider.value);
-            const gravity = parseFloat(gravitySlider.value);
-            const particleCount = parseInt(particleCountSlider.value);
-            const particleSize = parseFloat(particleSizeSlider.value);
-            createParticles(x, y, force, gravity, particleCount, particleSize);
-        });
-
-        animate();
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Адаптивный Салют на Canvas</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; overflow: hidden; }
-        
-        #myCanvas {
-            width: 100vw;
-            height: 100vh;
-            background: black;
-            display: block;
-        }
-        
-        #controls {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            color: white;
-            display: none; /* скрыто по умолчанию */
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 2vh 2vw; /* адаптивные отступы */
-            border-radius: 5px;
-            font-size: 2.5vw; /* адаптивный размер шрифта */
-        }
-        
-        #toggleButton {
-            position: fixed;
-            bottom: 3vh;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            padding: 1vh 2vw;
-            font-size: 3vw;
-            color: white;
-            background: rgba(0, 0, 0, 0.7);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        label, input {
-            font-size: inherit; /* наследование адаптивного шрифта */
-        }
-
-        /* Настройки для мобильных устройств */
-        @media (max-width: 768px) {
-            #controls {
-                font-size: 3vw;
-            }
-            #toggleButton {
-                font-size: 4vw;
-                padding: 2vw;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Кнопка для отображения/скрытия панели управления -->
-    <button id="toggleButton">Настройки</button>
-
-    <!-- Панель управления для настройки параметров салюта -->
-    <div id="controls">
-        <label>Сила: <input type="range" id="force" min="1" max="20" value="10"></label>
-        <label>Гравитация: <input type="range" id="gravity" min="0" max="2" step="0.1" value="0.5"></label>
-        <label>Количество частиц: <input type="range" id="particleCount" min="50" max="500" value="200"></label>
-        <label>Размер частиц: <input type="range" id="particleSize" min="1" max="10" value="3"></label>
-    </div>
-    
-    <!-- Canvas для отображения салюта -->
-    <canvas id="myCanvas"></canvas>
-
-    <script>
-        const canvas = document.getElementById("myCanvas");
-        const ctx = canvas.getContext("2d");
-        const particles = [];
-        const forceSlider = document.getElementById("force");
-        const gravitySlider = document.getElementById("gravity");
-        const particleCountSlider = document.getElementById("particleCount");
-        const particleSizeSlider = document.getElementById("particleSize");
-        const toggleButton = document.getElementById("toggleButton");
-        const controls = document.getElementById("controls");
-
-        // Установка размеров canvas во весь экран
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function randomColor() {
-            return `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
-        }
-
-        class Particle {
-            constructor(x, y, force, gravity, size) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * force;
-                this.vy = Math.random() * -force;
-                this.gravity = gravity;
-                this.size = size;
-                this.alpha = 1;
-                this.color = randomColor();
-            }
-
-            update() {
-                this.vy += this.gravity;
-                this.x += this.vx;
-                this.y += this.vy;
-                this.alpha -= 0.02;
-            }
-
-            draw() {
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-        }
-
-        function createParticles(x, y, force, gravity, particleCount, particleSize) {
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle(x, y, force, gravity, particleSize));
-            }
-        }
-
-        function animate() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                p.update();
-                p.draw();
-
-                if (p.alpha <= 0) {
-                    particles.splice(i, 1);
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-
-        // Показать/скрыть панель управления при нажатии кнопки
-        toggleButton.addEventListener("click", () => {
-            controls.style.display = controls.style.display === "none" ? "flex" : "none";
-        });
-
-        // Центрирование фейерверка при клике
-        canvas.addEventListener("click", (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
-            const force = parseFloat(forceSlider.value);
-            const gravity = parseFloat(gravitySlider.value);
-            const particleCount = parseInt(particleCountSlider.value);
-            const particleSize = parseFloat(particleSizeSlider.value);
-            createParticles(x, y, force, gravity, particleCount, particleSize);
-        });
-
-        animate();
-    </script>
-</body>
-</html>
+<!-- JavaScript для перенаправления -->
+<script>
+    function goToHome() {
+        window.location.href = "https://alex-kom.ru";
+    }
+</script>
 
 </body>
 </html>
