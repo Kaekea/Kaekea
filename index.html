@@ -5,42 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Переливающиеся и морфирующие ссылки с волной и увеличением</title>
     <style>
-        /* Контейнер для центрирования текста */
+        /* Основной контейнер для центрирования текста */
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh; /* Минимальная высота экрана */
+            min-height: 100vh;
             text-align: center;
-            overflow: visible; /* Убедимся, что ничего не обрезается */
+            overflow: visible;
         }
 
         /* Стиль для ссылок */
         .morphing-link {
-            font-size: 5em; /* Увеличиваем размер текста */
+            font-size: 5em;
             color: #3498db;
             font-weight: bold;
             text-decoration: none;
             display: inline-block;
-            animation: colorShift 10s infinite; /* Замедлили цветовое переливание */
-            white-space: nowrap; /* Предотвращает перенос текста */
+            animation: colorShift 10s infinite;
+            white-space: nowrap;
         }
 
         /* Эффект волны и увеличения для каждой буквы */
         .wave span {
             display: inline-block;
-            animation: wave 0.1s infinite ease-in-out; /* Замедлили анимацию волны */
-            animation: wave 2s infinite ease-in-out; /* Замедлили анимацию волны */
+            animation: wave 2s infinite ease-in-out;
         }
 
         /* Ключевые кадры для анимации волны с увеличением */
         @keyframes wave {
             0%, 100% {
-                transform: translateY(0) scale(1); /* Начальная позиция и размер */
+                transform: translateY(0) scale(1);
             }
             50% {
-                transform: translateY(-20px) scale(1.2); /* Подъем и увеличение */
+                transform: translateY(-20px) scale(1.2);
             }
         }
 
@@ -62,13 +61,87 @@
                 color: #3498db;
             }
         }
+
+        /* CSS для кнопок по сторонам экрана */
+        .side-button {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            background-color: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 50%;
+            text-decoration: none;
+            animation: float 3s infinite ease-in-out;
+            z-index: 1000;
+        }
+
+        .side-button.left {
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .side-button.right {
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Анимация для движения кнопок вверх-вниз */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(-50%) translateY(0);
+            }
+            50% {
+                transform: translateY(-50%) translateY(-20px);
+            }
+        }
+
+        /* Медиазапросы для адаптивности */
+        @media (max-width: 1024px) {
+            .morphing-link {
+                font-size: 4em;
+            }
+            .side-button {
+                width: 50px;
+                height: 50px;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .morphing-link {
+                font-size: 3em;
+            }
+            .side-button {
+                width: 40px;
+                height: 40px;
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .morphing-link {
+                font-size: 2em;
+            }
+            .side-button {
+                width: 35px;
+                height: 35px;
+                font-size: 8px;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <a href="audiotools.html" class="morphing-link wave">
-        <!-- Каждая буква обернута в <span> для волнового эффекта -->
         <span style="animation-delay: 0s">A</span>
         <span style="animation-delay: 0.2s">u</span>
         <span style="animation-delay: 0.4s">d</span>
@@ -87,68 +160,29 @@
         <span style="animation-delay: 0.6s">e</span>
         <span style="animation-delay: 0.8s">X</span>
         <span style="animation-delay: 1s">O</span>
-       <a href="games.html" class="morphing-link wave"> 
+    </a><br>
+    <a href="games.html" class="morphing-link wave">
         <span style="animation-delay: 0s">g</span>
         <span style="animation-delay: 0.2s">a</span>
         <span style="animation-delay: 0.4s">m</span>
         <span style="animation-delay: 0.6s">e</span>
         <span style="animation-delay: 0.8s">s</span>
-       <a href="maps.html" class="morphing-link wave"> 
+    </a><br>
+    <a href="maps.html" class="morphing-link wave">
         <span style="animation-delay: 0s">m</span>
         <span style="animation-delay: 0.2s">a</span>
         <span style="animation-delay: 0.4s">p</span>
         <span style="animation-delay: 0.6s">s</span>
-       <a href="all.html" class="morphing-link wave"> 
+    </a><br>
+    <a href="all.html" class="morphing-link wave">
         <span style="animation-delay: 0s">a</span>
         <span style="animation-delay: 0.2s">l</span>
         <span style="animation-delay: 0.4s">l</span>
-    </a><br>
+    </a>
 </div>
 
-    <!-- CSS для кнопок по сторонам экрана -->
-<style>
-    /* Основной стиль для кнопок */
-    .side-button {
-        position: fixed;
-        width: 60px;
-        height: 60px;
-        background-color: #3498db;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: bold;
-        text-align: center;
-        border-radius: 50%;
-        text-decoration: none;
-        animation: float 3s infinite ease-in-out;
-        z-index: 1000; /* Поверх основного содержимого страницы */
-    }
+<a href="#left" class="side-button left">&larr;</a>
+<a href="#right" class="side-button right">&rarr;</a>
 
-    /* Левая кнопка */
-    .side-button.left {
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* Правая кнопка */
-    .side-button.right {
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* Анимация для движения вверх-вниз */
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(-50%) translateY(0);
-        }
-        50% {
-            transform: translateY(-50%) translateY(-20px);
-        }
-    }    
-</style>
 </body>
 </html>
