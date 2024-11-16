@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera with Unique File Names</title>
+    <title>Camera with MP4 Video Recording</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,15 +15,19 @@
             margin: 0;
             background-color: #f0f0f0;
         }
-        video, canvas {
+        video {
             border: 2px solid #ccc;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
+            width: 80%;
+            max-width: 600px;
         }
         .button-container {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         button {
             padding: 10px 20px;
@@ -37,46 +41,40 @@
         button:hover {
             background-color: #0056b3;
         }
-        button.capture {
-            background-color: #28a745;
+        button.recording {
+            background-color: #FFC107;
         }
-        button.capture:hover {
-            background-color: #218838;
-        }
-        button.stop {
-            background-color: #FF4D4D;
-        }
-        button.stop:hover {
-            background-color: #D93535;
+        button.recording:hover {
+            background-color: #E0A800;
         }
     </style>
 </head>
 <body>
-    <h1>Camera with Unique File Names</h1>
+    <h1>Record Video as MP4</h1>
     <video id="video" autoplay playsinline></video>
-    <canvas id="canvas" style="display: none;"></canvas>
     <div class="button-container">
         <button id="startButton">Start Camera</button>
-        <button id="stopButton" class="stop">Stop Camera</button>
-        <button id="captureButton" class="capture">Take Photo</button>
+        <button id="startRecordingButton" class="recording">Start Recording</button>
+        <button id="stopRecordingButton" class="recording" disabled>Stop Recording</button>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.0/dist/ffmpeg.min.js"></script>
     <script>
         const videoElement = document.getElementById('video');
-        const canvasElement = document.getElementById('canvas');
         const startButton = document.getElementById('startButton');
-        const stopButton = document.getElementById('stopButton');
-        const captureButton = document.getElementById('captureButton');
+        const startRecordingButton = document.getElementById('startRecordingButton');
+        const stopRecordingButton = document.getElementById('stopRecordingButton');
         let stream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
 
         // Генерация случайного имени файла
-        function generateRandomFileName() {
+        function generateRandomFileName(extension) {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let fileName = '';
             for (let i = 0; i < 20; i++) {
                 fileName += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-            return fileName + '.png';
+            return fileName + extension;
         }
 
         // Запуск камеры
@@ -89,27 +87,58 @@
             }
         });
 
-        // Остановка камеры
-        stopButton.addEventListener('click', () => {
-            if (stream) {
-                const tracks = stream.getTracks();
-                tracks.forEach(track => track.stop());
-                videoElement.srcObject = null;
+        // Начало записи видео
+        startRecordingButton.addEventListener('click', () => {
+            if (!stream) {
+                alert('Сначала запустите камеру.');
+                return;
             }
+            recordedChunks = [];
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = async () => {
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                const arrayBuffer = await blob.arrayBuffer();
+                const ffmpeg = FFmpeg.createFFmpeg({ log: true });
+                await ffmpeg.load();
+
+                // Загружаем файл в FFmpeg
+                await ffmpeg.FS('writeFile', 'input.webm', new Uint8Array(arrayBuffer));
+
+                // Конвертируем в MP4
+                await ffmpeg.run('-i', 'input.webm', 'output.mp4');
+                const data = ffmpeg.FS('readFile', 'output.mp4');
+
+                // Создаём ссылку для скачивания MP4
+                const mp4Blob = new Blob([data.buffer], { type: 'video/mp4' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(mp4Blob);
+                link.download = generateRandomFileName('.mp4');
+                link.click();
+
+                // Освобождаем ресурсы FFmpeg
+                ffmpeg.FS('unlink', 'input.webm');
+                ffmpeg.FS('unlink', 'output.mp4');
+            };
+
+            mediaRecorder.start();
+            startRecordingButton.disabled = true;
+            stopRecordingButton.disabled = false;
         });
 
-        // Снимок с камеры
-        captureButton.addEventListener('click', () => {
-            const context = canvasElement.getContext('2d');
-            canvasElement.width = videoElement.videoWidth;
-            canvasElement.height = videoElement.videoHeight;
-            context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-
-            // Сохранение снимка
-            const link = document.createElement('a');
-            link.download = generateRandomFileName(); // Уникальное имя файла
-            link.href = canvasElement.toDataURL('image/png');
-            link.click();
+        // Остановка записи видео
+        stopRecordingButton.addEventListener('click', () => {
+            if (mediaRecorder) {
+                mediaRecorder.stop();
+                startRecordingButton.disabled = false;
+                stopRecordingButton.disabled = true;
+            }
         });
     </script>
 </body>
