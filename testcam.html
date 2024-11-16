@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera Access</title>
+    <title>Camera with Photo Capture</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,15 +15,13 @@
             margin: 0;
             background-color: #f0f0f0;
         }
-        video {
+        video, canvas {
             border: 2px solid #ccc;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 600px;
+            margin-bottom: 10px;
         }
         .button-container {
-            margin-top: 10px;
             display: flex;
             gap: 10px;
         }
@@ -39,6 +37,12 @@
         button:hover {
             background-color: #0056b3;
         }
+        button.capture {
+            background-color: #28a745;
+        }
+        button.capture:hover {
+            background-color: #218838;
+        }
         button.stop {
             background-color: #FF4D4D;
         }
@@ -48,36 +52,54 @@
     </style>
 </head>
 <body>
-    <h1>Camera Access</h1>
+    <h1>Camera with Photo Capture</h1>
     <video id="video" autoplay playsinline></video>
+    <canvas id="canvas" style="display: none;"></canvas>
     <div class="button-container">
         <button id="startButton">Start Camera</button>
         <button id="stopButton" class="stop">Stop Camera</button>
+        <button id="captureButton" class="capture">Take Photo</button>
     </div>
 
     <script>
         const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('canvas');
         const startButton = document.getElementById('startButton');
         const stopButton = document.getElementById('stopButton');
-        let stream = null; // Для хранения текущего видео потока
+        const captureButton = document.getElementById('captureButton');
+        let stream = null;
 
-        // Функция запуска камеры
+        // Запуск камеры
         startButton.addEventListener('click', async () => {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 videoElement.srcObject = stream;
             } catch (error) {
-                alert('Unable to access the camera: ' + error.message);
+                alert('Ошибка: ' + error.message);
             }
         });
 
-        // Функция остановки камеры
+        // Остановка камеры
         stopButton.addEventListener('click', () => {
             if (stream) {
-                const tracks = stream.getTracks(); // Получаем все потоки
-                tracks.forEach(track => track.stop()); // Останавливаем каждый поток
-                videoElement.srcObject = null; // Убираем поток из видео
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                videoElement.srcObject = null;
             }
+        });
+
+        // Снимок с камеры
+        captureButton.addEventListener('click', () => {
+            const context = canvasElement.getContext('2d');
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+            context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+            // Сохранение снимка
+            const link = document.createElement('a');
+            link.download = 'photo.png';
+            link.href = canvasElement.toDataURL('image/png');
+            link.click();
         });
     </script>
 </body>
