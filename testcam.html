@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera with Photo Capture</title>
+    <title>Camera with Unique File Names</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,7 +52,7 @@
     </style>
 </head>
 <body>
-    <h1>Camera with Photo Capture</h1>
+    <h1>Camera with Unique File Names</h1>
     <video id="video" autoplay playsinline></video>
     <canvas id="canvas" style="display: none;"></canvas>
     <div class="button-container">
@@ -68,6 +68,16 @@
         const stopButton = document.getElementById('stopButton');
         const captureButton = document.getElementById('captureButton');
         let stream = null;
+
+        // Генерация случайного имени файла
+        function generateRandomFileName() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let fileName = '';
+            for (let i = 0; i < 20; i++) {
+                fileName += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return fileName + '.png';
+        }
 
         // Запуск камеры
         startButton.addEventListener('click', async () => {
@@ -97,7 +107,7 @@
 
             // Сохранение снимка
             const link = document.createElement('a');
-            link.download = 'photo.png';
+            link.download = generateRandomFileName(); // Уникальное имя файла
             link.href = canvasElement.toDataURL('image/png');
             link.click();
         });
