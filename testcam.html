@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo and Video Recorder with Audio</title>
+    <title>Photo and Video Recorder with Echo Cancellation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,7 +62,7 @@
     </style>
 </head>
 <body>
-    <h1>Photo and Video Recorder with Audio</h1>
+    <h1>Photo and Video Recorder with Echo Cancellation</h1>
     <video id="video" autoplay playsinline></video>
     <div class="button-container">
         <button id="startCamera">Start Camera</button>
@@ -92,10 +92,17 @@
             return fileName + extension;
         }
 
-        // Запуск камеры с записью звука
+        // Запуск камеры с подавлением эха и шумов
         startCameraButton.addEventListener('click', async () => {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: {
+                        echoCancellation: true,      // Подавление эха
+                        noiseSuppression: true,      // Подавление шума
+                        autoGainControl: true        // Автоматическое управление усилением
+                    }
+                });
                 videoElement.srcObject = stream;
 
                 // Включение кнопок
