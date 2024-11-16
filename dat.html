@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motion Detection</title>
+    <title>Motion Detection with Voice</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,7 +62,7 @@
     </style>
 </head>
 <body>
-    <h1>Motion Detection</h1>
+    <h1>Motion Detection with Voice</h1>
     <video id="video" autoplay playsinline></video>
     <div class="button-container">
         <button id="startCamera">Start Camera</button>
@@ -80,6 +80,7 @@
         const disableMotionButton = document.getElementById('disableMotion');
         let stream = null;
         let motionDetectionInterval = null;
+        let motionDetectionStartTime = null;
 
         // Генерация случайного имени файла
         function generateRandomFileName(extension) {
@@ -89,6 +90,13 @@
                 fileName += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             return fileName + extension;
+        }
+
+        // Функция для голосового произношения
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ru-RU'; // Устанавливаем русский язык
+            speechSynthesis.speak(utterance);
         }
 
         // Запуск камеры
@@ -127,6 +135,10 @@
                 disableMotionButton.disabled = true;
                 stopCameraButton.disabled = true;
                 startCameraButton.disabled = false;
+
+                // Остановка датчиков движения
+                clearInterval(motionDetectionInterval);
+                motionDetectionStartTime = null;
             }
         });
 
@@ -152,7 +164,11 @@
             canvas.width = videoElement.videoWidth;
             canvas.height = videoElement.videoHeight;
 
+            motionDetectionStartTime = Date.now();
+
             motionDetectionInterval = setInterval(() => {
+                const elapsed = Date.now() - motionDetectionStartTime;
+
                 context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
                 const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
                 const pixels = imageData.data;
@@ -165,8 +181,9 @@
                     }
                 }
 
-                if (motionDetected) {
-                    console.log('Движение обнаружено!');
+                // Проверяем, если прошло больше 5 секунд и обнаружено движение
+                if (motionDetected && elapsed > 5000) {
+                    speak('Привет, как дела?');
                 }
             }, 200);
 
@@ -177,10 +194,10 @@
         // Выключение датчиков движения
         disableMotionButton.addEventListener('click', () => {
             clearInterval(motionDetectionInterval);
+            motionDetectionStartTime = null;
             enableMotionButton.disabled = false;
             disableMotionButton.disabled = true;
         });
     </script>
 </body>
 </html>
-
