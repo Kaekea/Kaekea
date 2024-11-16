@@ -1,1 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        video {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button.capture {
+            background-color: #28a745;
+        }
+        button.capture:hover {
+            background-color: #218838;
+        }
+        button.stop {
+            background-color: #FF4D4D;
+        }
+        button.stop:hover {
+            background-color: #D93535;
+        }
+        button.motion {
+            background-color: #FFC107;
+        }
+        button.motion:hover {
+            background-color: #E0A800;
+        }
+    </style>
+</head>
+<body>
+    <h1>Motion Detection</h1>
+    <video id="video" autoplay playsinline></video>
+    <div class="button-container">
+        <button id="startCamera">Start Camera</button>
+        <button id="stopCamera" class="stop" disabled>Stop Camera</button>
+        <button id="takePhoto" class="capture" disabled>Take Photo</button>
+        <button id="enableMotion" class="motion" disabled>Вкл. датчики движения</button>
+        <button id="disableMotion" class="motion" disabled>Выкл. датчики движения</button>
+    </div>
+    <script>
+        const videoElement = document.getElementById('video');
+        const startCameraButton = document.getElementById('startCamera');
+        const stopCameraButton = document.getElementById('stopCamera');
+        const takePhotoButton = document.getElementById('takePhoto');
+        const enableMotionButton = document.getElementById('enableMotion');
+        const disableMotionButton = document.getElementById('disableMotion');
+        let stream = null;
+        let motionDetectionInterval = null;
+
+        // Генерация случайного имени файла
+        function generateRandomFileName(extension) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let fileName = '';
+            for (let i = 0; i < 20; i++) {
+                fileName += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return fileName + extension;
+        }
+
+        // Запуск камеры
+        startCameraButton.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    }
+                });
+                videoElement.srcObject = stream;
+
+                // Включение кнопок
+                takePhotoButton.disabled = false;
+                enableMotionButton.disabled = false;
+                stopCameraButton.disabled = false;
+                startCameraButton.disabled = true;
+            } catch (error) {
+                alert('Ошибка доступа к камере или микрофону: ' + error.message);
+            }
+        });
+
+        // Остановка камеры
+        stopCameraButton.addEventListener('click', () => {
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                videoElement.srcObject = null;
+
+                // Отключение кнопок
+                takePhotoButton.disabled = true;
+                enableMotionButton.disabled = true;
+                disableMotionButton.disabled = true;
+                stopCameraButton.disabled = true;
+                startCameraButton.disabled = false;
+            }
+        });
+
+        // Снимок с камеры
+        takePhotoButton.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            // Сохранение снимка
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = generateRandomFileName('.png');
+            link.click();
+        });
+
+        // Включение датчиков движения
+        enableMotionButton.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+
+            motionDetectionInterval = setInterval(() => {
+                context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                const pixels = imageData.data;
+                let motionDetected = false;
+
+                for (let i = 0; i < pixels.length; i += 4) {
+                    if (Math.abs(pixels[i] - pixels[i + 1]) > 50) { // Примерный порог
+                        motionDetected = true;
+                        break;
+                    }
+                }
+
+                if (motionDetected) {
+                    console.log('Движение обнаружено!');
+                }
+            }, 200);
+
+            enableMotionButton.disabled = true;
+            disableMotionButton.disabled = false;
+        });
+
+        // Выключение датчиков движения
+        disableMotionButton.addEventListener('click', () => {
+            clearInterval(motionDetectionInterval);
+            enableMotionButton.disabled = false;
+            disableMotionButton.disabled = true;
+        });
+    </script>
+</body>
+</html>
 
