@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera with Photo and Video Recording</title>
+    <title>Photo and Video Recorder with Audio</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,7 +62,7 @@
     </style>
 </head>
 <body>
-    <h1>Photo and Video Recorder</h1>
+    <h1>Photo and Video Recorder with Audio</h1>
     <video id="video" autoplay playsinline></video>
     <div class="button-container">
         <button id="startCamera">Start Camera</button>
@@ -92,10 +92,10 @@
             return fileName + extension;
         }
 
-        // Запуск камеры
+        // Запуск камеры с записью звука
         startCameraButton.addEventListener('click', async () => {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 videoElement.srcObject = stream;
 
                 // Включение кнопок
@@ -104,7 +104,7 @@
                 stopCameraButton.disabled = false;
                 startCameraButton.disabled = true;
             } catch (error) {
-                alert('Ошибка доступа к камере: ' + error.message);
+                alert('Ошибка доступа к камере или микрофону: ' + error.message);
             }
         });
 
