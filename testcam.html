@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera Test</title>
+    <title>Camera with Photo and Video Recording</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,14 +15,19 @@
             margin: 0;
             background-color: #f0f0f0;
         }
-        video, canvas {
+        video {
             border: 2px solid #ccc;
             border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
+            width: 80%;
+            max-width: 600px;
         }
         .button-container {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
+            justify-content: center;
         }
         button {
             padding: 10px 20px;
@@ -42,46 +47,133 @@
         button.capture:hover {
             background-color: #218838;
         }
+        button.stop {
+            background-color: #FF4D4D;
+        }
+        button.stop:hover {
+            background-color: #D93535;
+        }
+        button.recording {
+            background-color: #FFC107;
+        }
+        button.recording:hover {
+            background-color: #E0A800;
+        }
     </style>
 </head>
 <body>
-    <h1>Camera Test</h1>
+    <h1>Photo and Video Recorder</h1>
     <video id="video" autoplay playsinline></video>
-    <canvas id="canvas" style="display: none;"></canvas>
     <div class="button-container">
         <button id="startCamera">Start Camera</button>
+        <button id="stopCamera" class="stop" disabled>Stop Camera</button>
         <button id="takePhoto" class="capture" disabled>Take Photo</button>
+        <button id="startRecording" class="recording" disabled>Start Recording</button>
+        <button id="stopRecording" class="recording" disabled>Stop Recording</button>
     </div>
     <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
+        const videoElement = document.getElementById('video');
         const startCameraButton = document.getElementById('startCamera');
+        const stopCameraButton = document.getElementById('stopCamera');
         const takePhotoButton = document.getElementById('takePhoto');
+        const startRecordingButton = document.getElementById('startRecording');
+        const stopRecordingButton = document.getElementById('stopRecording');
         let stream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
 
-        // Start Camera
+        // Генерация случайного имени файла
+        function generateRandomFileName(extension) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let fileName = '';
+            for (let i = 0; i < 20; i++) {
+                fileName += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return fileName + extension;
+        }
+
+        // Запуск камеры
         startCameraButton.addEventListener('click', async () => {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = stream;
+                videoElement.srcObject = stream;
+
+                // Включение кнопок
                 takePhotoButton.disabled = false;
+                startRecordingButton.disabled = false;
+                stopCameraButton.disabled = false;
+                startCameraButton.disabled = true;
             } catch (error) {
-                alert('Error accessing camera: ' + error.message);
+                alert('Ошибка доступа к камере: ' + error.message);
             }
         });
 
-        // Take Photo
-        takePhotoButton.addEventListener('click', () => {
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        // Остановка камеры
+        stopCameraButton.addEventListener('click', () => {
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                videoElement.srcObject = null;
 
-            // Save Photo
+                // Отключение кнопок
+                takePhotoButton.disabled = true;
+                startRecordingButton.disabled = true;
+                stopRecordingButton.disabled = true;
+                stopCameraButton.disabled = true;
+                startCameraButton.disabled = false;
+            }
+        });
+
+        // Снимок с камеры
+        takePhotoButton.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            // Сохранение снимка
             const link = document.createElement('a');
             link.href = canvas.toDataURL('image/png');
-            link.download = 'photo.png';
+            link.download = generateRandomFileName('.png'); // Уникальное имя файла
             link.click();
+        });
+
+        // Начало записи видео
+        startRecordingButton.addEventListener('click', () => {
+            if (!stream) {
+                alert('Камера не запущена.');
+                return;
+            }
+            recordedChunks = [];
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = generateRandomFileName('.webm'); // Уникальное имя файла
+                link.click();
+            };
+
+            mediaRecorder.start();
+            startRecordingButton.disabled = true;
+            stopRecordingButton.disabled = false;
+        });
+
+        // Остановка записи видео
+        stopRecordingButton.addEventListener('click', () => {
+            if (mediaRecorder) {
+                mediaRecorder.stop();
+                startRecordingButton.disabled = false;
+                stopRecordingButton.disabled = true;
+            }
         });
     </script>
 </body>
