@@ -19,9 +19,15 @@
             border: 2px solid #ccc;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        .button-container {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
         }
         button {
-            margin-top: 10px;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -33,23 +39,44 @@
         button:hover {
             background-color: #0056b3;
         }
+        button.stop {
+            background-color: #FF4D4D;
+        }
+        button.stop:hover {
+            background-color: #D93535;
+        }
     </style>
 </head>
 <body>
     <h1>Camera Access</h1>
     <video id="video" autoplay playsinline></video>
-    <button id="startButton">Start Camera</button>
+    <div class="button-container">
+        <button id="startButton">Start Camera</button>
+        <button id="stopButton" class="stop">Stop Camera</button>
+    </div>
 
     <script>
         const videoElement = document.getElementById('video');
         const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        let stream = null; // Для хранения текущего видео потока
 
+        // Функция запуска камеры
         startButton.addEventListener('click', async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 videoElement.srcObject = stream;
             } catch (error) {
                 alert('Unable to access the camera: ' + error.message);
+            }
+        });
+
+        // Функция остановки камеры
+        stopButton.addEventListener('click', () => {
+            if (stream) {
+                const tracks = stream.getTracks(); // Получаем все потоки
+                tracks.forEach(track => track.stop()); // Останавливаем каждый поток
+                videoElement.srcObject = null; // Убираем поток из видео
             }
         });
     </script>
